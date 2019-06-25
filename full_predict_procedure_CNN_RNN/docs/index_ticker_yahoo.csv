@@ -1,0 +1,23 @@
+Ticker, Name, Type, description
+#World Stock Price, , ,
+^NYA,NYSE COMPOSITE (DJ), Index, USA 
+^IXIC, Nasdaq, Index, USA
+^N225, Nikkei 225, Index, Japan
+000001.SS, SSE Composite Index, Index, China
+^N100, EURONEXT 100, Index, Europe
+^FTSE, FTSE 100, Index, UK
+^HSI, HANG SENG INDEX, Index, HK
+^SZSC, Shenzhen Component, Index, China
+^GDAXI,DAX PERFORMANCE-INDEX, Index, Germany
+^BSESN, S&P BSE SENSEX, Index, India
+^GSPTSE, S&P/TSX Composite index, Index, Canada
+^KS11, KOSPI Composite Index, Index, Korea
+^SSMI, SMI PR, Index, Swiss
+#didn't find north europe, , ,
+^AXJO, S&P/ASX 200, Index, Australian
+^JN0U.JO, Top 40 USD Net TRI Index, Index, South Africa
+^TWII, TSEC weighted index,Index, Taiwan
+^BVSP, IBOVESPA, Index, Brazil
+#World Bond Price (yahoo finance not available, use investing.com instead), , ,
+#World Currency Price (yahoo finance not available, use investing.com instead), , ,
+/Users/rucachen/Desktop/France 30-Year Bond Yield Historical Data.csv

@@ -1,0 +1,1 @@
+{"target_folder": "all", "start_dt": "2009-1-29", "end_dt": "2019-1-29", "maximum_lag": 14, "periods_one_conn": 730, "predict_conns_periods": 1, "max_epoches": null, "batch_size": 128, "label_size": 2, "conns_for_one_element": 14, "predict_movement_periods": 128, "layer_num": 4, "n_hidden_units": 128, "iscontinue": true, "predict_target": "^TWII_move"}
