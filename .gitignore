@@ -108,7 +108,7 @@ ENV/
 .tfrecords
 
 # pickles
-.pickles
+.pickle
 
 # checkpoint tensorflow
 .model_RNN
