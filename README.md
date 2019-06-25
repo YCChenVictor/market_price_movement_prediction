@@ -1,8 +1,8 @@
 ## Project title
-Multi Time Series Connectedness
+Stock Price Movement Prediction
 
 ## Motivation
-This project is motivated by Financial and Macroeconomics Connectedness created by Diebold and Ylimaz. I want to use this algorithm not only in finance and macroeconomics area but other area, so I start to build this project.
+This project is motivated by Financial and Macroeconomics Connectedness created by Diebold and Ylimaz. Predict stock movement based on the connections between stock, currency, debt market.
 
 ## Flow
 ![alt text](https://github.com/YCChenVictor/MultiTimeSeries_Connectedness/blob/master/Untitled%20Diagram.png)
