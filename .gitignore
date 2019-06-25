@@ -108,8 +108,8 @@ ENV/
 .tfrecords
 
 # pickles
-*.pkl
-**/*.pkl
+*.pickle
+**/*.pickle
 
 
 # checkpoint tensorflow
