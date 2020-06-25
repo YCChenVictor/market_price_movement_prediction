@@ -115,3 +115,7 @@ ENV/
 # checkpoint tensorflow
 .model_RNN
 .model_CNN
+
+docs/
+
+test.py

@@ -108,12 +108,13 @@ class Rolling_Connectedness:
         name.remove("Date")
         name.append("all")
 
+        # print(vol_dict)
+
         # the target dates
-        start_dt = minus_date(start_dt, predict_period)
-        end_dt = minus_date(end_dt, predict_period)
+        start_dt = date_format(start_dt)
+        end_dt = date_format(end_dt)
         date_range = daterange(start_dt, end_dt)
         dates_list = list(date_range)
-        # print(dates_list)
 
         # convert the elements of dates_list into string
         dates_list_str = []

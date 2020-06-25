@@ -5,30 +5,29 @@ import json
 import datetime
 import random
 import functions.f_date as fd
-import functions.about_path as fap
+import functions.f_about_path as fap
 
-
-# function to turn Int64 into 'tf.train.Feature' format
-def int64_feature(value):
-    if not isinstance(value, list):
-        value = [value]
-    return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
-
-
-# function to turn Bytes into 'tf.train.Feature' format
-def bytes_feature(value):
+'''https://www.tensorflow.org/tutorials/load_data/tfrecord'''
+# The following functions can be used to convert a value to a type compatible
+# with tf.Example.
+def _bytes_feature(value):
+    """Returns a bytes_list from a string / byte."""
+    if isinstance(value, type(tf.constant(0))):
+        value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
+def _float_feature(value):
+    """Returns a float_list from a float / double."""
+    return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
 
-# function to turn float inro 'tf.train.Feature' format
-def float_feature(value):
-    return tf.train.Feature(float_list=tf.train.FloatList(value=value))
-
+def _int64_feature(value):
+    """Returns an int64_list from a bool / enum / int / uint."""
+    return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 # functions to convert input and output data into TFRecord
 def convert_to_TFRecord(inputs, outputs, filename):
 
-    TFWriter = tf.python_io.TFRecordWriter(filename)
+    TFWriter = tf.io.TFRecordWriter(filename)
     print('\nTransform start...')
 
     num_of_data = 0
@@ -46,9 +45,9 @@ def convert_to_TFRecord(inputs, outputs, filename):
             # print(output_single)
 
             # turn input and output into tf.train.Feature
-            input_tf = bytes_feature(input_single)
+            input_tf = _bytes_feature(input_single)
             # print(input_tf)
-            output_tf = int64_feature(output_single)
+            output_tf = _int64_feature(output_single)
             # print(output_tf)
 
             # combine tf.train.Feature into tf.train.Features
@@ -103,6 +102,9 @@ def split_dict_train_test(dict_data, predict_movement_periods):
     # list for key going to be deleted
     key_delete_list = []
 
+    print("輸入的資料 tfrecord")
+    print(len(dict_data.keys()))
+
     # add data into train_dict
     for key, item in dict_data.items():
 
@@ -116,6 +118,9 @@ def split_dict_train_test(dict_data, predict_movement_periods):
 
         if i == (len(dict_data.keys()) - predict_movement_periods):
             break
+
+        # print("輸入的資料 tfrecord")
+        # print(i)
 
     # delete the data in train_dict
     for key in key_delete_list:
@@ -201,7 +206,7 @@ def balance_label(input_dict, output_dict):
 
     for key, item in output_dict.items():
 
-        if item is 0:
+        if item == 0:
             key_list_0.append(key)
         else:
             key_list_1.append(key)
@@ -225,14 +230,16 @@ def balance_label(input_dict, output_dict):
 
 
 # function to shuffle the input (output shuffled in tfrecord accordingly)
-def shuffle_input_dict(input_dict):
+def shuffle_input_dict(input_dict, output_dict):
 
     # shuffle keys
     key_list = list(input_dict.keys())
     random.shuffle(key_list)
 
     input_dict_shuffle = {}
+    output_dict_shuffle = {}
     for key in key_list:
         input_dict_shuffle[key] = input_dict[key]
+        output_dict_shuffle[key] = output_dict[key]
 
-    return input_dict_shuffle
+    return input_dict_shuffle, output_dict_shuffle

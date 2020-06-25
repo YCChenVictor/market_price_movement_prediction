@@ -2,7 +2,7 @@ import pandas as pd
 import datetime
 import os
 import pickle
-from functions.about_path import f_parent_path
+from functions.f_about_path import f_parent_path
 
 
 def daterange(date1, date2):

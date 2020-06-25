@@ -4,8 +4,7 @@ import datetime
 import pandas as pd
 import os
 import pickle
-from functions.about_path import f_parent_path
-
+from functions.f_about_path import f_parent_path
 
 def yang_zhang_volatility(data, n=2, clean=False):
     """
@@ -40,7 +39,6 @@ def yang_zhang_volatility(data, n=2, clean=False):
     else:
         return result
 
-
 def daterange(date1, date2):
     """
     :param date1: start date
@@ -50,12 +48,10 @@ def daterange(date1, date2):
     for n in range(int((date2 - date1).days) + 1):
         yield date1 + datetime.timedelta(n)
 
-
 def date_format(date):
     list_date = date.split("-")
     year, month, day = list_date[0], list_date[1], list_date[2]
     return datetime.date(int(year), int(month), int(day))
-
 
 class volatility:
 
