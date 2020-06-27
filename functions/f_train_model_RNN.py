@@ -56,4 +56,6 @@ def get_model(conns_for_one_element, n_table_elements, n_hidden_units):
     model.add(Dense(units = 1))
     model.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics=['accuracy'])
 
+    # model.summary()
+
     return model

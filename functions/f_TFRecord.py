@@ -192,7 +192,10 @@ def input_output_same_key(input_dict, output_dict):
     output_dict_new = {}
 
     for key, item in input_dict.items():
-        output_dict_new[key] = output_dict[key]
+        if key in output_dict:
+            output_dict_new[key] = output_dict[key]
+        else:
+            output_dict_new[key] = None # the movement which is not happened
 
     return input_dict, output_dict_new
 

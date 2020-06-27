@@ -1,5 +1,3 @@
-'''keras tutorial: https://www.tensorflow.org/guide/keras/functional'''
-
 import tensorflow as tf
 from functions.f_train_model_RNN import (extract_features, get_batched_dataset, get_model)
 import os
@@ -40,35 +38,63 @@ n_table_elements = (n_price + 1) ** 2
 # filename = './docs/py_Train_flat.tfrecords'
 
 # read input_dict and output_dict for training
-with open('./docs/input_dict.pickle', 'rb') as f:
-    input_dict = pickle.load(f)
-with open('./docs/output_dict.pickle', 'rb') as f:
-    output_dict = pickle.load(f)
+with open('./docs/input_dict_train.pickle', 'rb') as f:
+    input_dict_train = pickle.load(f)
+with open('./docs/output_dict_train.pickle', 'rb') as f:
+    output_dict_train = pickle.load(f)
+with open('./docs/input_dict_test.pickle', 'rb') as f:
+    input_dict_test = pickle.load(f)
+with open('./docs/output_dict_test.pickle', 'rb') as f:
+    output_dict_test = pickle.load(f)
 
-# append input_dict
-input_list = []
-for key, item in input_dict.items():
-    input_list.append(item)
-X_train = np.array(input_list) # [samples, timesteps, features]
+# append input_dict_train
+input_list_train = []
+for key, item in input_dict_train.items():
+    input_list_train.append(item)
+X_train = np.array(input_list_train) # [samples, timesteps, features]
 
-# append output_dict
-output_list = []
-for key, item in output_dict.items():
-    output_list.append(item)
-y_train = np.array(output_list)
-y_train = y_train.reshape((y_train.shape[0],))
+# append output_dict_train
+output_list_train = []
+for key, item in output_dict_train.items():
+    output_list_train.append(item)
+y_train = np.array(output_list_train)
+y_train = y_train.reshape((y_train.shape[0],)) # [lebal, ]
+
+# append output_dict_test
+output_list_test = []
+for key, item in output_dict_test.items():
+    if item == None:
+        key_future = key
+        continue
+    else:
+        output_list_test.append(item)
+y_test = np.array(output_list_test)
+y_test = y_test.reshape((y_test.shape[0],)) # [lebal, ]
+
+# append input_dict_test
+input_list_test = []
+for key, item in input_dict_test.items():
+    if key == key_future:
+        continue
+    else:
+        input_list_test.append(item)
+X_test = np.array(input_list_test) # [samples, timesteps, features]
 
 # training loop ####
+'''https://machinelearningmastery.com/tensorflow-tutorial-deep-learning-with-tf-keras/'''
 # define model
+'''https://www.tensorflow.org/tutorials/keras/save_and_load'''
+# checkpoint
+checkpoint_path = "./docs/checkpoint/cp.ckpt"
+checkpoint_dir = os.path.dirname(checkpoint_path)
+# Create a callback that saves the model's weights
+cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
+                                                 save_weights_only=True,
+                                                 verbose=2)
+# define the model structure
 model = get_model(conns_for_one_element, n_table_elements, n_hidden_units)
 # fit the model
-model.fit(X_train, y_train, epochs=350, batch_size=32, verbose=2)
-'''
-# evaluate the model
-mse, mae = model.evaluate(X_test, y_test, verbose=0)
-print('MSE: %.3f, RMSE: %.3f, MAE: %.3f' % (mse, sqrt(mse), mae))
-# make a prediction
-row = asarray([18024.0, 16722.0, 14385.0, 21342.0, 17180.0]).reshape((1, n_steps, 1))
-yhat = model.predict(row)
-print('Predicted: %.3f' % (yhat))
-'''
+model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=2,
+        # validation_data=(X_test, y_test),
+        callbacks=[cp_callback]
+        )

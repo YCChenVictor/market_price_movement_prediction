@@ -8,9 +8,13 @@
 # 2. 應該把 loss and accuracy 視覺化
 # 3. LSTM 的 prediction 就是要 predict 一整個 batch 的量。好消息是，tensorflow 可以共享 weight，所以可以先儲存 weight 在另外一個 graph 使用這個 weight，然後對 batch = 1 做 prediction。
 
-# batch and epoch
+# batch, epoch & iteration
 '''
+epoch: 當一個完整的資料集通過了神經網路一次並且返回了一次，這個過程稱為一次epoch。
+batch: 在不能將資料一次性通過神經網路的時候，就需要將資料集分成幾個batch。
+iteration: Iteration是batch需要完成一個epoch的次數。
 
+有一個2000個訓練樣本的資料集。將2000個樣本分成大小為500的batch,那麼完成一個epoch需要4個iteration。
 '''
 
 # Procedure:
@@ -56,9 +60,9 @@ prerequisite = {
     "predict_conns_periods": 1,
 
     # The number of epoches
-    "epochs": 200,
+    "epochs": 500,
     # The number of elements in a batch
-    "batch_size": 128,
+    "batch_size": 32,
     # The number of labels
     "label_size": 2,  # (up and down)
 
@@ -66,10 +70,10 @@ prerequisite = {
     "conns_for_one_element": 14,  # the time periods of LSTM
 
     # predict_movement_periods means how many periods to be predicted
-    "predict_movement_periods": 14,
+    "predict_movement_periods": 1, # 如果 predict_movement_periods <= predict_conns_periods，那就表示不會有可以做test validation的資料，因為都拿來training了
 
     # variable related to RNN (LSTM)
-    "layer_num": 4,
+    # "layer_num": 4,
     "n_hidden_units": 128,
 
     # variable related to gerenal setting of model (這邊還沒做好)
@@ -117,10 +121,8 @@ if prerequisite["iscontinue_conn"]:
 else:
     print("calculating rolling connectedness")
     import roll_conn
-'''
 
 # Turn data into TFRecord format (這部分應該要先放棄，因為官方也說不清楚怎麼用tfrecord訓練模型)
-'''
 print("turning data format into TFRecord")
 import data_TFRecord_format
 '''
@@ -131,9 +133,12 @@ print("training model CNN")
 import train_model_CNN
 '''
 
-# train model RNN (正在改成 version2 的 keras)
+# train model RNN
+'''
+這邊要設計一個依照上次checkpoint後繼續training的選項
 print("training model RNN")
 import train_model_RNN
+'''
 
 # train model CNN_RNN (ConvLSTM) (還在 version1)
 '''
@@ -143,11 +148,9 @@ import train_model_CNN_RNN
 
 # make prediction CNN
 
-'''
 # make prediction RNN
 print("make prediction")
 import predict_RNN
-'''
 
 # make prediction ConvLSTM
 

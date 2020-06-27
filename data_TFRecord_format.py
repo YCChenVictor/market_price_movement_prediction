@@ -86,31 +86,57 @@ roll_conn_flat_elements_dict = {datetime.datetime.combine(fd.date_format(key),
 train_flat_dict, test_flat_dict = split_dict_train_test(roll_conn_flat_elements_dict,
                                                         predict_movement_periods)
 
+# deal with train dataset ####
 # make the input and output dict the same keys (delete excess data in output)
-input_dict, output_dict = input_output_same_key(train_flat_dict, movement_dict)
+input_dict_train, output_dict_train = input_output_same_key(train_flat_dict, movement_dict)
 
 # balance label (avoid tendency to predict only one label)
-input_dict, output_dict = balance_label(input_dict, output_dict)
+input_dict_train, output_dict_train = balance_label(input_dict_train, output_dict_train)
 
 # shuffle the input (output shuffled in tfrecord accordingly with the key in convert_to_TFRecord)
-input_dict, output_dict = shuffle_input_dict(input_dict, output_dict)
+input_dict_train, output_dict_train = shuffle_input_dict(input_dict_train, output_dict_train)
 
+# deal with test dataset ####
+# make the input and output dict the same keys (delete excess data in output)
+input_dict_test, output_dict_test = input_output_same_key(test_flat_dict, movement_dict)
+
+# balance label (avoid tendency to predict only one label)
+input_dict_test, output_dict_test = balance_label(input_dict_test, output_dict_test)
+
+# shuffle the input (output shuffled in tfrecord accordingly with the key in convert_to_TFRecord)
+input_dict_test, output_dict_test = shuffle_input_dict(input_dict_test, output_dict_test)
+
+'''
 # turn train_dict into TFRecord (目前先放棄使用TFRecord)
 file_dir = './docs/py_Train_flat.tfrecords'
-convert_to_TFRecord(input_dict, output_dict, file_dir)
+convert_to_TFRecord(input_dict_train, output_dict_train, file_dir)
 print("converting py_Train_flat.tfrecords")
+'''
 
-# save input_dict
+# save input_dict_train
 file_path = os.path.dirname(os.path.realpath(__file__))
-save_path = file_path + '/docs/' + 'input_dict.pickle'
+save_path = file_path + '/docs/' + 'input_dict_train.pickle'
 with open(save_path, 'wb') as f:
-    pickle.dump(input_dict, f)
+    pickle.dump(input_dict_train, f)
 
-# save output_dict
+# save output_dict_train
 file_path = os.path.dirname(os.path.realpath(__file__))
-save_path = file_path + '/docs/' + 'output_dict.pickle'
+save_path = file_path + '/docs/' + 'output_dict_train.pickle'
 with open(save_path, 'wb') as f:
-    pickle.dump(output_dict, f)
+    pickle.dump(output_dict_train, f)
+
+# save input_dict_test
+file_path = os.path.dirname(os.path.realpath(__file__))
+save_path = file_path + '/docs/' + 'input_dict_test.pickle'
+with open(save_path, 'wb') as f:
+    pickle.dump(input_dict_test, f)
+
+# save output_dict_test
+file_path = os.path.dirname(os.path.realpath(__file__))
+save_path = file_path + '/docs/' + 'output_dict_test.pickle'
+with open(save_path, 'wb') as f:
+    pickle.dump(output_dict_test, f)
+
 '''
 #
 #
