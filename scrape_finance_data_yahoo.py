@@ -20,11 +20,17 @@ period_days = period_end - period_begin
 period_seconds = period_days.total_seconds()
 period_seconds = str(int(period_seconds))
 
+# create docs dir if not exist
+if not os.path.exists('./docs'):
+    os.makedirs('./docs')
+
 # the ticker_file
-tickers = './docs/index_ticker_yahoo.csv'
+tickers = 'index_ticker_yahoo.csv'
 
 # the download location
 location = './docs/market_price'
+if not os.path.exists(location):
+    os.makedirs(location)
 
 # Set up Chromedriver
 prefs = {'download.default_directory' : location}
