@@ -24,7 +24,7 @@ iteration: Iteration是batch需要完成一個epoch的次數。
 # 4. calculate volatilities
 # 5. calculate movements (should have the option to select label or value in the future)
 # 6. calculate rolling connectedness (should try to increase the speed in the future)
-# 7. add rolling connectedness (used only when there is new connectedness)
+# 7. add rolling connlsectedness (used only when there is new connectedness)
 # 8. Turn data into TFRecord format
 # 9. train model (CNN, RNN, ConvLSTM)
 # 10. predict movement (CNN, RNN, ConvLSTM)
@@ -87,7 +87,7 @@ prerequisite = {
 # save the Prerequisite
 file_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = fap.f_parent_path(file_path)
-path = parent_path + '/docs/' + 'Prerequisite.json'
+path = parent_path + 'Prerequisite.json'
 with open(path, 'w') as outfile:
     json.dump(prerequisite, outfile)
 
@@ -97,7 +97,6 @@ save_path = './docs/' + target_folder
 num_of_files = sum([len(files) for r, d, files in os.walk(save_path)])
 num_table_elements = (num_of_files + 1) ** 2
 
-'''
 # scrape finance data from yahoo finance
 print("scraping finance data")
 import scrape_finance_data_yahoo
@@ -125,7 +124,6 @@ else:
 # Turn data into TFRecord format (這部分應該要先放棄，因為官方也說不清楚怎麼用tfrecord訓練模型)
 print("turning data format into TFRecord")
 import data_TFRecord_format
-'''
 
 # train model CNN (還在 version1)
 '''

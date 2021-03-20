@@ -1,0 +1,41 @@
+# the pre-requisite
+prerequisite = {
+
+    # target_folder saves all the data to calculate connectedness
+    "target_folder": "market_price",
+
+    # The start_dt and end_dt define the periods to calculate the predicted connectedness which is going to be input of tensorflow
+    "start_dt": "2010-11-19",
+    "end_dt": "2020-06-18",
+
+    # The maximum lag to make VAR calculation
+    "maximum_lag": 14,
+    # The number of periods to calculate one connectedness
+    "periods_one_conn": 365,
+    # predict_conns_periods means how forward predicted periods of connectedness
+    "predict_conns_periods": 1,
+
+    # The number of epoches
+    "epochs": 500,
+    # The number of elements in a batch
+    "batch_size": 32,
+    # The number of labels
+    "label_size": 2,  # (up and down)
+
+    # The conns_for_one_element defines how many periods in one element, which means how many conns match one movement
+    "conns_for_one_element": 14,  # the time periods of LSTM
+
+    # predict_movement_periods means how many periods to be predicted
+    "predict_movement_periods": 1, # 如果 predict_movement_periods <= predict_conns_periods，那就表示不會有可以做test validation的資料，因為都拿來training了
+
+    # variable related to RNN (LSTM)
+    # "layer_num": 4,
+    "n_hidden_units": 128,
+
+    # variable related to gerenal setting of model (這邊還沒做好)
+    "iscontinue": False,  # whether to keep training model
+    "iscontinue_conn": False,  # whether to keep calculating rolling connectedness
+
+    # predict target
+    "predict_target": '^TWII_move'
+    }
