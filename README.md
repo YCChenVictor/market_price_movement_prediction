@@ -1,1 +1,7 @@
-# market_price_movement_prediction
+# Market Price Movement Prediction
+
+## Usage
+
+```bash
+python3 main.py
+```
