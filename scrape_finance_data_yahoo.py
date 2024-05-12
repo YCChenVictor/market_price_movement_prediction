@@ -39,7 +39,8 @@ chrome_options.add_argument('--headless') # 這步可以規避很多 chrome bug
 chrome_options.add_experimental_option('prefs', prefs)
 
 driver_path = "./env/bin/chromedriver"
-driver = webdriver.Chrome(driver_path, chrome_options=chrome_options)
+cService = webdriver.ChromeService(executable_path=driver_path)
+driver = webdriver.Chrome(service = cService)
 
 # delete all the file in the target folder
 for the_file in os.listdir(location):
