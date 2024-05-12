@@ -42,12 +42,8 @@ start_time = time.time()
 the relationship bet. batch, epoches:
 '''
 
-# save the Prerequisite
-file_path = os.path.dirname(os.path.realpath(__file__))
-parent_path = fap.f_parent_path(file_path)
-path = parent_path + 'Prerequisite.json'
-with open(path, 'w') as outfile:
-    json.dump(prerequisite, outfile)
+with open('prerequisite.json', 'r') as f:
+    prerequisite = json.load(f)
 
 # get the number of market prices and the num of elements of connectedness table
 target_folder = prerequisite['target_folder']
