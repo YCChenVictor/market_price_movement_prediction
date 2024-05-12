@@ -1,30 +1,30 @@
 # conclusion:
-# 1. CNN 不能用（training accuracy 無法上升）
-# 2. LSTM 還可以用（training accuracy 可以上到 100%）
-# 3. ConvLSTM
+# 1. CNN cannot be used (training accuracy cannot increase)
+# 2. LSTM can still be used (training accuracy can reach 100%)
+# 3. Convert CNN_LSTM to ConvLSTM
 
 # problem:
-# 1. 把 CNN_LSTM 改成 ConvLSTM
-# 2. 應該把 loss and accuracy 視覺化
-# 3. LSTM 的 prediction 就是要 predict 一整個 batch 的量。好消息是，tensorflow 可以共享 weight，所以可以先儲存 weight 在另外一個 graph 使用這個 weight，然後對 batch = 1 做 prediction。
+# 1. Change CNN_LSTM to ConvLSTM
+# 2. Visualize loss and accuracy
+# 3. For LSTM prediction, predict the entire batch. Good news is that TensorFlow can share weights, so you can save the weights and use them in another graph to predict batch = 1.
 
 # batch, epoch & iteration
 '''
-epoch: 當一個完整的資料集通過了神經網路一次並且返回了一次，這個過程稱為一次epoch。
-batch: 在不能將資料一次性通過神經網路的時候，就需要將資料集分成幾個batch。
-iteration: Iteration是batch需要完成一個epoch的次數。
+epoch: When a complete dataset passes through a neural network and returns once, this process is called one epoch.
+batch: When it is not possible to pass the entire dataset through the neural network at once, the dataset is divided into several batches.
+iteration: An iteration is the number of times a batch needs to be completed to complete one epoch.
 
-有一個2000個訓練樣本的資料集。將2000個樣本分成大小為500的batch,那麼完成一個epoch需要4個iteration。
+For example, if there is a dataset with 2000 training samples and it is divided into batches of size 500, then it would take 4 iterations to complete one epoch.
 '''
 
 # Procedure:
 # 1. scrape finance data from yahoo finance
 # 2. scrape finance data from investing.com (now manually)
 # 3. modify data to deal with NAN and repeat data problem
-# 4. calculate volatilities
+# 4. calculate volatility
 # 5. calculate movements (should have the option to select label or value in the future)
 # 6. calculate rolling connectedness (should try to increase the speed in the future)
-# 7. add rolling connlsectedness (used only when there is new connectedness)
+# 7. add rolling connectedness (used only when there is new connectedness)
 # 8. Turn data into TFRecord format
 # 9. train model (CNN, RNN, ConvLSTM)
 # 10. predict movement (CNN, RNN, ConvLSTM)
