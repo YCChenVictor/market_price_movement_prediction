@@ -53,31 +53,31 @@ num_table_elements = (num_of_files + 1) ** 2
 
 # scrape finance data from yahoo finance
 print("scraping finance data")
-import scrape_finance_data_yahoo
+import flows.scrape_finance_data_yahoo as scrape_finance_data_yahoo
 
 # modify data to deal with NAN and repeat data problem
 print("modifying data")
-import load_and_modify_data
+import flows.load_and_modify_data as load_and_modify_data
 
 # calculate volatilities
 print("calculating volatilities")
-import volatility
+import flows.volatility as volatility
 
 # calculate movements (should have the option to select label or value)
 print("calculating movements")
-import movement
+import flows.movement as movement
 
 # calculate rolling connectedness
 if prerequisite["iscontinue_conn"]:
     print("add new rolling connectedness")
-    import add_roll_conn
+    import flows.add_roll_conn as add_roll_conn
 else:
     print("calculating rolling connectedness")
-    import roll_conn
+    import flows.roll_conn as roll_conn
 
 # Turn data into TFRecord format (這部分應該要先放棄，因為官方也說不清楚怎麼用tfrecord訓練模型)
 print("turning data format into TFRecord")
-import data_TFRecord_format
+import flows.data_TFRecord_format as data_TFRecord_format
 
 # train model CNN (還在 version1)
 '''
@@ -102,7 +102,7 @@ import train_model_CNN_RNN
 
 # make prediction RNN
 print("make prediction")
-import predict_RNN
+import flows.predict_RNN as predict_RNN
 
 # make prediction ConvLSTM
 
