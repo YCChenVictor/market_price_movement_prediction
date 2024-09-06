@@ -4,7 +4,7 @@ import csv
 import os.path
 import datetime
 import os
-from functions.f_scrape_data import download_yahoo_quotes
+from ..functions.f_scrape_data import download_yahoo_quotes
 
 # the current date
 now = datetime.datetime.now()
