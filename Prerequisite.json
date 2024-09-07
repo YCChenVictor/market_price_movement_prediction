@@ -18,8 +18,8 @@
     "predict_target": "To predict which one"
   },
   "target_folder": "market_price",
-  "start_dt": "2010-11-19",
-  "end_dt": "2020-06-18",
+  "start_time": "2024-09-06T10:00:00+10:00",
+  "end_time": "2024-09-06T16:11:00+10:00",
   "maximum_lag": 14,
   "periods_one_conn": 365,
   "predict_conns_periods": 1,
