@@ -1,5 +1,4 @@
-# import modules
-import functions.f_volatility as f_vol
+from ..functions.volatility import volatility
 import os
 import pickle
 import time
@@ -10,15 +9,15 @@ start_time = time.time()
 
 # load Prerequisite
 file_dir = os.path.dirname(os.path.abspath(__file__))
-with open(file_dir + '/docs' + '/Prerequisite.json') as f:
+with open(file_dir + '/../../Prerequisite.json') as f:
     prerequisite = json.load(f)
 # print(prerequisite)
 
 # obtain start_date, end_date
-end_dt = prerequisite['end_dt']
+end_time = prerequisite['end_time']
 
 # calculate volatility dataframe
-volatility = f_vol.volatility(end_dt)
+volatility = volatility(end_time)
 volatility.price_data_to_volatility()
 volatility.dataframe_volatility()
 volatility_dataframe = volatility.dataframe
