@@ -4,7 +4,6 @@ import datetime
 import pandas as pd
 import os
 import pickle
-from functions.f_about_path import f_parent_path
 
 def yang_zhang_volatility(data, n=2, clean=False):
     """
@@ -66,15 +65,10 @@ class volatility:
 
     # read the price data, set up dictionary and then calculate the volatility
     def price_data_to_volatility(self):
-
-        # import the stock price data
-        file_path = os.path.dirname(os.path.realpath(__file__))
-        parent_path = f_parent_path(file_path, 1)
-        save_path = parent_path + '/docs/' + 'modified_price_df.pickle'
-        with open(save_path, 'rb') as f:
+        file_dir = os.path.dirname(os.path.abspath(__file__))
+        with open(file_dir + '/../../docs/modified_price_df.pickle', 'rb') as f:
             dict_data = pickle.load(f)
 
-        # calculate volatility
         dict_volatility = {}
         for data in dict_data:
             vol_name = data + '_vol'
@@ -89,7 +83,7 @@ class volatility:
                 print(item)
         """
 
-    # turn them into dataframe
+    # turn them into dataframe. Ignore the timezone currently.
     def dataframe_volatility(self):
 
         start = date_format("1900-01-01")
