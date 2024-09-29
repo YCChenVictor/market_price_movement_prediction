@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from pathlib import Path
 from dotenv import load_dotenv
+from apscheduler.schedulers.background import BackgroundScheduler
 
 env_path = Path(__file__).resolve().parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
@@ -38,3 +39,14 @@ async def write_data(data: VolatilityData):
         return {"message": "Volatility data written successfully."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+def cron_job():
+    print("Cron job executed")
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(cron_job, 'interval', minutes=1)
+scheduler.start()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    scheduler.shutdown()
