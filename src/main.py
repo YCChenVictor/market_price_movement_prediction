@@ -1,12 +1,17 @@
+import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from influxdb_client import InfluxDBClient, Point, WritePrecision
-import os
+from pathlib import Path
+from dotenv import load_dotenv
 
+env_path = Path(__file__).resolve().parent.parent / '.env'
+load_dotenv(dotenv_path=env_path)
 INFLUXDB_URL = os.getenv("INFLUXDB_URL")
 INFLUXDB_TOKEN = os.getenv("INFLUXDB_TOKEN")
 INFLUXDB_ORG = os.getenv("INFLUXDB_ORG")
 INFLUXDB_BUCKET = os.getenv("INFLUXDB_BUCKET")
+
 client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=INFLUXDB_ORG)
 write_api = client.write_api()
 
