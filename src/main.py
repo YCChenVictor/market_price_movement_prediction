@@ -1,10 +1,13 @@
 import os
+import logging
+import time
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from pathlib import Path
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 
 env_path = Path(__file__).resolve().parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
@@ -17,6 +20,8 @@ client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=INFLUXDB_ORG
 write_api = client.write_api()
 
 app = FastAPI()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class VolatilityData(BaseModel):
     symbol: str
@@ -40,13 +45,14 @@ async def write_data(data: VolatilityData):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-def cron_job():
-    print("Cron job executed")
+def my_scheduled_job():
+    logger.info(f"Job executed at {time.strftime('%Y-%m-%d %H:%M:%S')}")
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(cron_job, 'interval', minutes=1)
-scheduler.start()
+def start_scheduler():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(my_scheduled_job, IntervalTrigger(seconds=10))
+    scheduler.start()
 
-@app.on_event("shutdown")
-def shutdown_event():
-    scheduler.shutdown()
+@app.on_event("startup")
+def startup_event():
+    start_scheduler()
