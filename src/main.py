@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
-# Include API routes
 app.include_router(api_app.router)
 
 @app.on_event("startup")
