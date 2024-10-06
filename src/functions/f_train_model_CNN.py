@@ -2,6 +2,7 @@ import tensorflow as tf
 import os
 import functions.about_path as fap
 import json
+
 #
 #
 #
@@ -10,7 +11,7 @@ import json
 # import prerequisite
 file_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = fap.f_parent_path(file_path, 1)
-path = parent_path + '/docs/' + 'Prerequisite.json'
+path = parent_path + "/docs/" + "Prerequisite.json"
 with open(path) as f:
     prerequisite = json.load(f)
 
@@ -18,11 +19,13 @@ with open(path) as f:
 label_size = prerequisite["label_size"]
 
 # get the number of instrumnets
-target_folder = prerequisite['target_folder']
+target_folder = prerequisite["target_folder"]
 file_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = fap.f_parent_path(file_path, 1)
-save_path = parent_path + '/docs/' + target_folder
+save_path = parent_path + "/docs/" + target_folder
 n_instruments = sum([len(files) for r, d, files in os.walk(save_path)])
+
+
 #
 #
 #
@@ -31,16 +34,16 @@ n_instruments = sum([len(files) for r, d, files in os.walk(save_path)])
 def read_and_decode(filename, batch_size, num_of_epoches):
 
     # produce the file queue
-    filename_queue = tf.train.string_input_producer([filename],
-                                                    shuffle=False,
-                                                    num_epochs=num_of_epoches)
+    filename_queue = tf.train.string_input_producer(
+        [filename], shuffle=False, num_epochs=num_of_epoches
+    )
 
     # The tool to read data from Train.tfrecords
     reader = tf.TFRecordReader()
     _, serialized_example = reader.read(filename_queue)
 
     # unpack tfrecords
-    '''
+    """
     The steps in packing TFRecord file:
     original file > Feature > Features > Example > TFRecord
 
@@ -52,28 +55,28 @@ def read_and_decode(filename, batch_size, num_of_epoches):
 
     Use tf.decode_raw or tf.cast to turn tf.train.Features into
     tf.train.Feature
-    '''
-    features = {'output': tf.FixedLenFeature([], tf.int64),
-                'input': tf.FixedLenFeature([], tf.string)}
+    """
+    features = {
+        "output": tf.FixedLenFeature([], tf.int64),
+        "input": tf.FixedLenFeature([], tf.string),
+    }
 
-    data_features = tf.parse_single_example(serialized_example,
-                                            features=features)
+    data_features = tf.parse_single_example(serialized_example, features=features)
 
-    input_tensor = tf.decode_raw(data_features['input'], tf.float32)
+    input_tensor = tf.decode_raw(data_features["input"], tf.float32)
 
-    input_tensor = tf.reshape(input_tensor, [n_instruments + 1,
-                                             n_instruments + 1])
+    input_tensor = tf.reshape(input_tensor, [n_instruments + 1, n_instruments + 1])
 
-    output_tensor = tf.cast(data_features['output'], tf.int64)
+    output_tensor = tf.cast(data_features["output"], tf.int64)
 
     # output data in order / output data in random
     # tf.train.batch / tf.train.shuffle_batch
     input_batch, output_batch = tf.train.batch(
         [input_tensor, output_tensor],
-        batch_size=batch_size
+        batch_size=batch_size,
         # capacity=10000 + 3 * batch_size,
         # min_after_dequeue=1000
-        )
+    )
 
     return input_batch, output_batch
 
@@ -83,16 +86,18 @@ def read_and_decode(filename, batch_size, num_of_epoches):
     # capacity: must be int, the maximum number of element
     # min_after_dequeue： must be int, the minimum number remained after output
     # all the data
+
+
 #
 #
 #
 #
 # tensors
 def Weight(shape, mean=0, stddev=1):
-    '''
+    """
     If shape = [5, 5, 1, 4], the size of tensor that data going to input will
     be width=5, height=5, color=1, number of tensor = 4
-    '''
+    """
     # 以常態分佈進行初始化
     init = tf.truncated_normal(shape, mean=mean, stddev=stddev)
 
@@ -103,24 +108,24 @@ def Weight(shape, mean=0, stddev=1):
 
 
 def bias(shape, mean=0, stddev=1):
-    '''
+    """
     the shape of bias must match the fourth element of the shape of Weight
-    '''
+    """
     init = tf.truncated_normal(shape, mean=mean, stddev=stddev)
     return tf.Variable(init)
 
 
 # 預定義卷積運算子
 def conv2d(x, W, strides=[1, 1, 1, 1]):
-    '''
+    """
     If [1, 1, 1, 1], means the step in width, height, color, tensor will be
     all 1
-    '''
-    return tf.nn.conv2d(x, W, strides=strides, padding='SAME')
+    """
+    return tf.nn.conv2d(x, W, strides=strides, padding="SAME")
 
 
 def max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1]):
-    return tf.nn.max_pool(x, ksize=ksize, strides=strides, padding='SAME')
+    return tf.nn.max_pool(x, ksize=ksize, strides=strides, padding="SAME")
 
 
 # function for neural network
@@ -151,9 +156,9 @@ def neural_network_model(x):
     pool2 = max_pool(relu2)
 
     # FC1
-    W_fc1 = Weight([128*16, 64])  # 這邊一直有問題，到底要多少數字？
+    W_fc1 = Weight([128 * 16, 64])  # 這邊一直有問題，到底要多少數字？
     b_fc1 = bias([64])
-    h_flat = tf.reshape(pool2, [-1, 128*16])
+    h_flat = tf.reshape(pool2, [-1, 128 * 16])
     y_fc1 = tf.matmul(h_flat, W_fc1) + b_fc1
 
     # ReLU3

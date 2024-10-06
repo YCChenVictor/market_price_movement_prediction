@@ -9,12 +9,12 @@ start_time = time.time()
 
 # load Prerequisite
 file_dir = os.path.dirname(os.path.abspath(__file__))
-with open(file_dir + '/../../Prerequisite.json') as f:
+with open(file_dir + "/../../Prerequisite.json") as f:
     prerequisite = json.load(f)
 # print(prerequisite)
 
 # obtain start_date, end_date
-end_time = prerequisite['end_time']
+end_time = prerequisite["end_time"]
 
 # calculate volatility dataframe
 volatility = volatility(end_time)
@@ -27,8 +27,8 @@ print(volatility_dataframe)
 
 # save the volatility_dataframe into pickle
 file_path = os.path.dirname(os.path.realpath(__file__))
-save_path = file_path + '/docs/' + 'volatility.pickle'
-with open(save_path, 'wb') as f:
+save_path = file_path + "/docs/" + "volatility.pickle"
+with open(save_path, "wb") as f:
     pickle.dump(volatility_dataframe, f)
 
 # count the time span, end

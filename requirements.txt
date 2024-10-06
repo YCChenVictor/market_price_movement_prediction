@@ -7,3 +7,5 @@ pytest-asyncio==0.24.0
 python-dotenv==1.0.1
 apscheduler==3.10.4
 yfinance==0.2.44
+flake8==7.1.1
+black==24.8.0

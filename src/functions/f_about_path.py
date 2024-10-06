@@ -4,7 +4,6 @@ This script:
     2. add path to system path
 """
 
-
 import os
 import sys
 

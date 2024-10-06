@@ -7,28 +7,33 @@ import random
 import functions.f_date as fd
 import functions.f_about_path as fap
 
-'''https://www.tensorflow.org/tutorials/load_data/tfrecord'''
+"""https://www.tensorflow.org/tutorials/load_data/tfrecord"""
+
+
 # The following functions can be used to convert a value to a type compatible
 # with tf.Example.
 def _bytes_feature(value):
     """Returns a bytes_list from a string / byte."""
     if isinstance(value, type(tf.constant(0))):
-        value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
+        value = value.numpy()  # BytesList won't unpack a string from an EagerTensor.
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
+
 
 def _float_feature(value):
     """Returns a float_list from a float / double."""
     return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
 
+
 def _int64_feature(value):
     """Returns an int64_list from a bool / enum / int / uint."""
     return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
+
 
 # functions to convert input and output data into TFRecord
 def convert_to_TFRecord(inputs, outputs, filename):
 
     TFWriter = tf.io.TFRecordWriter(filename)
-    print('\nTransform start...')
+    print("\nTransform start...")
 
     num_of_data = 0
     for key, item in inputs.items():
@@ -52,8 +57,8 @@ def convert_to_TFRecord(inputs, outputs, filename):
 
             # combine tf.train.Feature into tf.train.Features
             tf_features = tf.train.Features(
-                   feature={'output': output_tf,
-                            'input': input_tf})
+                feature={"output": output_tf, "input": input_tf}
+            )
 
             # turn tf.train.Features into tf.train.Example
             example = tf.train.Example(features=tf_features)
@@ -69,25 +74,25 @@ def convert_to_TFRecord(inputs, outputs, filename):
 
         except IOError as e:
             print(e)
-            print('Skip!\n')
+            print("Skip!\n")
 
     # save the number of data
     file_path = os.path.dirname(os.path.realpath(__file__))
     parent_path = fap.f_parent_path(file_path, 1)
-    path = parent_path + '/docs/' + 'post_requisite.json'
+    path = parent_path + "/docs/" + "post_requisite.json"
 
     post_requisite = {}
 
     post_requisite["num_of_data"] = num_of_data
 
     # save it into post_requisite
-    with open(path, 'w') as outfile:
+    with open(path, "w") as outfile:
         json.dump(post_requisite, outfile)
 
     # print(prerequisite)
 
     TFWriter.close()
-    print('Transform done!')
+    print("Transform done!")
 
 
 # function to split dict into train and test
@@ -149,7 +154,7 @@ def conn_table_periods_converter(table_dict, periods):
     for key in range(len(key_list)):
 
         # obtain the last periods of key
-        last_keys = key_list[-(periods+1): -1]
+        last_keys = key_list[-(periods + 1) : -1]
         # print(last_keys)
 
         # delete the last key
@@ -174,8 +179,7 @@ def conn_table_periods_converter(table_dict, periods):
 
         # get the date ##
         # convert date into date_format
-        date = datetime.datetime.combine(fd.date_format(key_list[key]),
-                                         datetime.time())
+        date = datetime.datetime.combine(fd.date_format(key_list[key]), datetime.time())
 
         # add periods days
         date = date + datetime.timedelta(days=periods)
@@ -195,7 +199,7 @@ def input_output_same_key(input_dict, output_dict):
         if key in output_dict:
             output_dict_new[key] = output_dict[key]
         else:
-            output_dict_new[key] = None # the movement which is not happened
+            output_dict_new[key] = None  # the movement which is not happened
 
     return input_dict, output_dict_new
 

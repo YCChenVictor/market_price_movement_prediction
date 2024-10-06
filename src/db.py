@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient
 
 # Load environment variables
-env_path = Path(__file__).resolve().parent.parent / '.env'
+env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 INFLUXDB_URL = os.getenv("INFLUXDB_URL")
 INFLUXDB_TOKEN = os.getenv("INFLUXDB_TOKEN")
