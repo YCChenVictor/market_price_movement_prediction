@@ -3,6 +3,7 @@ import numpy as np
 import math
 from sklearn import linear_model
 import operator
+
 # ======================
 
 
@@ -13,7 +14,12 @@ def var_y(data, lag=1):
     :return: for example, if lag = 4, then the first part of 4 periods would be
     # deleted because we cannot estimate them
     """
-    y = data.reset_index(drop=True).drop("Date", axis=1).drop(range(lag)).values.transpose()
+    y = (
+        data.reset_index(drop=True)
+        .drop("Date", axis=1)
+        .drop(range(lag))
+        .values.transpose()
+    )
     return y
 
 
@@ -26,7 +32,12 @@ def shift_right(data, n_shift):
     """
     nrow = data.shape[0]
     ncol = data.shape[1]
-    matrix_na = np.empty((nrow, n_shift,))
+    matrix_na = np.empty(
+        (
+            nrow,
+            n_shift,
+        )
+    )
     matrix_na[:] = np.nan
     matrix_num = np.delete(data, [list(range(ncol - n_shift, ncol))], 1)
     result = np.concatenate((matrix_na, matrix_num), axis=1)
@@ -146,16 +157,15 @@ class Coef:
         sx = self.var_x(data, lag[0])
         sy = self.var_y(data, lag[0])
 
-        lasso_model = (linear_model.
-                       MultiTaskLassoCV(cv=cv_value, fit_intercept=False,
-                                        max_iter=max_iter).
-                       fit(sx.transpose(), sy.transpose()))
+        lasso_model = linear_model.MultiTaskLassoCV(
+            cv=cv_value, fit_intercept=False, max_iter=max_iter
+        ).fit(sx.transpose(), sy.transpose())
 
         self.LASSO_alpha = lasso_model.alpha_
 
-        clf = (linear_model.
-               MultiTaskLasso(fit_intercept=False, alpha=self.LASSO_alpha,
-                              max_iter=1000))
+        clf = linear_model.MultiTaskLasso(
+            fit_intercept=False, alpha=self.LASSO_alpha, max_iter=1000
+        )
 
         clf.fit(sx.transpose(), sy.transpose())
 

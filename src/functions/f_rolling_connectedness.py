@@ -17,7 +17,7 @@ def roll_conn_elements(df, periods):
         # print(i)
 
         # get divided data
-        data = df.iloc[i: periods+i, :]
+        data = df.iloc[i : periods + i, :]
         # rint(data)
         if len(data) < periods:
             break
@@ -51,7 +51,9 @@ class Rolling_Connectedness:
         self.name = list(vol_df)
         self.max_lag = max_lag
         self.periods_one_conn = periods_one_conn
-        self.predict_period = predict_period  # the 'future-period' connectedness predicted by the data
+        self.predict_period = (
+            predict_period  # the 'future-period' connectedness predicted by the data
+        )
 
         # save the calculated connectedness
         self.vol_dict = None
@@ -72,7 +74,7 @@ class Rolling_Connectedness:
         for i in range(len(dataframe)):
 
             # get divided data
-            data = dataframe.iloc[i: periods+i, :]
+            data = dataframe.iloc[i : periods + i, :]
             if len(data) < periods:
                 break
 
@@ -87,7 +89,6 @@ class Rolling_Connectedness:
         self.vol_dict = vol_dict
 
     def calculate_rolling(self, start_dt, end_dt, saving_folder):
-
         """
         The start_dt and end_dt are the dates to calculate the predicted
         connectedness.
@@ -119,7 +120,7 @@ class Rolling_Connectedness:
         # convert the elements of dates_list into string
         dates_list_str = []
         for date in dates_list:
-            date = date.strftime('%Y-%m-%d')
+            date = date.strftime("%Y-%m-%d")
             dates_list_str.append(date)
         # print(dates_list_str)
 
@@ -135,7 +136,7 @@ class Rolling_Connectedness:
 
             # get start and end date
             start_date = data["Date"][0]
-            end_date = data["Date"][periods-1]
+            end_date = data["Date"][periods - 1]
             period = start_date + " ~ " + end_date
 
             print("calculating rolling, period: %s" % period)
@@ -160,7 +161,7 @@ class Rolling_Connectedness:
 
             # the key name is the end date + 1 day
             end_date_1 = add_date(end_date, 1)
-            end_date_1 = end_date_1.strftime('%Y-%m-%d')
+            end_date_1 = end_date_1.strftime("%Y-%m-%d")
 
             # append all the flat_connectedness
             roll_conn_dict[end_date_1] = conn.full_connectedness
@@ -170,20 +171,19 @@ class Rolling_Connectedness:
             self.roll_conn_dict = roll_conn_dict
             self.roll_conn_dict_flat = roll_conn_dict_flat
 
-            save_path_flat = saving_folder + 'roll_conn_flat.pickle'
-            save_path = saving_folder + 'roll_conn.pickle'
+            save_path_flat = saving_folder + "roll_conn_flat.pickle"
+            save_path = saving_folder + "roll_conn.pickle"
 
             # print(save_path_flat)
             # print(save_path)
 
-            with open(save_path_flat, 'wb') as f:
+            with open(save_path_flat, "wb") as f:
                 pickle.dump(roll_conn_dict_flat, f)
 
-            with open(save_path, 'wb') as f:
+            with open(save_path, "wb") as f:
                 pickle.dump(roll_conn_dict, f)
 
     def add_connectedness_and_df(self, start_dt, end_dt, saving_folder):
-
         """
         The start_dt and end_dt are the last date + 1 day in the vol_dataframe
         which is the date in roll_conn_dict
@@ -208,21 +208,21 @@ class Rolling_Connectedness:
         # convert the elements of dates_list into string
         dates_list_add = []
         for date in dates_list:
-            date = date.strftime('%Y-%m-%d')
+            date = date.strftime("%Y-%m-%d")
             dates_list_add.append(date)
 
         # get the calculated connectedness path
-        save_path_flat = saving_folder + 'roll_conn_flat.pickle'
-        save_path = saving_folder + 'roll_conn.pickle'
+        save_path_flat = saving_folder + "roll_conn_flat.pickle"
+        save_path = saving_folder + "roll_conn.pickle"
 
         # print(save_path_flat)
         # print(save_path)
 
         # load the calculated connectedness
-        with open(save_path_flat, 'rb') as f:
+        with open(save_path_flat, "rb") as f:
             roll_conn_dict_flat = pickle.load(f)
 
-        with open(save_path, 'rb') as f:
+        with open(save_path, "rb") as f:
             roll_conn_dict = pickle.load(f)
 
         # get the dates already calculated connectedness
@@ -230,8 +230,9 @@ class Rolling_Connectedness:
         # print(dates_list_origin)
 
         # get the dates going tp add connectedness
-        dates_list_add = [date for date in dates_list_add if date not in
-                          dates_list_origin]
+        dates_list_add = [
+            date for date in dates_list_add if date not in dates_list_origin
+        ]
         # print(dates_list_add)
 
         # calculate connectedness
@@ -239,7 +240,7 @@ class Rolling_Connectedness:
 
             # date - 1
             date = minus_date(date, 1)
-            date = date.strftime('%Y-%m-%d')
+            date = date.strftime("%Y-%m-%d")
 
             # specify the target volatility dataframe
             target = vol_dict[date]
@@ -247,7 +248,7 @@ class Rolling_Connectedness:
 
             # get start and end date
             start_date = target["Date"][0]
-            end_date = target["Date"][periods-1]
+            end_date = target["Date"][periods - 1]
             period = start_date + " ~ " + end_date
 
             print("calculating rolling, period: %s" % period)
@@ -276,7 +277,7 @@ class Rolling_Connectedness:
 
             # the key name is the end date + 1 day
             end_date_1 = add_date(end_date, 1)
-            end_date_1 = end_date_1.strftime('%Y-%m-%d')
+            end_date_1 = end_date_1.strftime("%Y-%m-%d")
 
             # append all the flat_connectedness
             roll_conn_dict[end_date_1] = conn.full_connectedness
@@ -286,16 +287,16 @@ class Rolling_Connectedness:
             self.roll_conn_dict = roll_conn_dict
             self.roll_conn_dict_flat = roll_conn_dict_flat
 
-            save_path_flat = saving_folder + 'roll_conn_flat.pickle'
-            save_path = saving_folder + 'roll_conn.pickle'
+            save_path_flat = saving_folder + "roll_conn_flat.pickle"
+            save_path = saving_folder + "roll_conn.pickle"
 
             # print(save_path_flat)
             # print(save_path)
 
-            with open(save_path_flat, 'wb') as f:
+            with open(save_path_flat, "wb") as f:
                 pickle.dump(roll_conn_dict_flat, f)
 
-            with open(save_path, 'wb') as f:
+            with open(save_path, "wb") as f:
                 pickle.dump(roll_conn_dict, f)
 
     def turn_into_df(self):
@@ -307,7 +308,7 @@ class Rolling_Connectedness:
 
         # turn dict into df
         result = pd.concat(roll_conn_dict)
-        result = result.reset_index().set_index('level_0').drop(['level_1'], axis=1)
+        result = result.reset_index().set_index("level_0").drop(["level_1"], axis=1)
 
         self.df = result
 

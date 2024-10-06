@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import pickle
 
+
 def yang_zhang_volatility(data, n=2, clean=False):
     """
     :param data: a list with Open, High, Low, Close price
@@ -13,10 +14,10 @@ def yang_zhang_volatility(data, n=2, clean=False):
     :return: A list of volatility data
     """
     # define required variables
-    o_c = (data['Open'] / data['Close'].shift(1)).apply(np.log)
-    c_o = (data['Close'] / data['Open']).apply(np.log)
-    h_o = (data['High'] / data['Open']).apply(np.log)
-    l_o = (data['Low'] / data['Open']).apply(np.log)
+    o_c = (data["Open"] / data["Close"].shift(1)).apply(np.log)
+    c_o = (data["Close"] / data["Open"]).apply(np.log)
+    h_o = (data["High"] / data["Open"]).apply(np.log)
+    l_o = (data["Low"] / data["Open"]).apply(np.log)
 
     # overnight volatility
     vo = o_c.rolling(window=n).apply(np.var, raw=True)
@@ -38,6 +39,7 @@ def yang_zhang_volatility(data, n=2, clean=False):
     else:
         return result
 
+
 def daterange(date1, date2):
     """
     :param date1: start date
@@ -47,10 +49,12 @@ def daterange(date1, date2):
     for n in range(int((date2 - date1).days) + 1):
         yield date1 + datetime.timedelta(n)
 
+
 def date_format(date):
     list_date = date.split("-")
     year, month, day = list_date[0], list_date[1], list_date[2]
     return datetime.date(int(year), int(month), int(day))
+
 
 class volatility:
 
@@ -66,16 +70,16 @@ class volatility:
     # read the price data, set up dictionary and then calculate the volatility
     def price_data_to_volatility(self):
         file_dir = os.path.dirname(os.path.abspath(__file__))
-        with open(file_dir + '/../../docs/modified_price_df.pickle', 'rb') as f:
+        with open(file_dir + "/../../docs/modified_price_df.pickle", "rb") as f:
             dict_data = pickle.load(f)
 
         dict_volatility = {}
         for data in dict_data:
-            vol_name = data + '_vol'
+            vol_name = data + "_vol"
             dict_volatility[vol_name] = yang_zhang_volatility(dict_data[data])
 
         self.dict_volatility = dict_volatility
-        
+
         """
         for key, item in self.dict_volatility.items():
             with pd.option_context('display.max_rows', None, 'display.max_columns', None):
@@ -95,7 +99,7 @@ class volatility:
             list_date.append(dt.strftime("%Y-%m-%d"))
 
         # specify date here, create specified Date data
-        dataframe_date = pd.DataFrame({'Date': list_date})
+        dataframe_date = pd.DataFrame({"Date": list_date})
         dataframe_date.index = list_date
 
         # merge all the volatility
@@ -111,8 +115,7 @@ class volatility:
             vol_data = vol_data.to_frame()
             vol_data.columns = [volatility]
             # print(movement_data)
-            result = result.merge(vol_data, left_index=True,
-                                  right_index=True)
+            result = result.merge(vol_data, left_index=True, right_index=True)
         # result = result.drop(columns=['Date'])
 
         # drop rows includes nan

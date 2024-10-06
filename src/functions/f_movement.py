@@ -31,8 +31,8 @@ def movement_value(dataframe):
     index_list = []
     for index, row in dataframe.iterrows():
 
-        Open = row['Open']
-        Close = row['Close']
+        Open = row["Open"]
+        Close = row["Close"]
 
         movement = Close - Open
 
@@ -65,8 +65,8 @@ def movement_label(dataframe):
     index_list = []
     for index, row in dataframe.iterrows():
 
-        Open = row['Open']
-        Close = row['Close']
+        Open = row["Open"]
+        Close = row["Close"]
 
         if Close > Open:
             movement = 1
@@ -85,7 +85,7 @@ def movement_label(dataframe):
     return result
 
 
-class predict_movement():
+class predict_movement:
 
     def __init__(self, end_dt):
 
@@ -101,20 +101,20 @@ class predict_movement():
         # import the stock price data
         file_path = os.path.dirname(os.path.realpath(__file__))
         parent_path = f_parent_path(file_path, 1)
-        save_path = parent_path + '/docs/' + 'modified_price_df.pickle'
-        with open(save_path, 'rb') as f:
+        save_path = parent_path + "/docs/" + "modified_price_df.pickle"
+        with open(save_path, "rb") as f:
             dict_data = pickle.load(f)
 
         # calculate movement (value or label)
         dict_movement = {}
 
         for data in dict_data:
-            move_name = data + '_move'
+            move_name = data + "_move"
             # print(movement(dict_data[data]))
 
-            if method == 'value':
+            if method == "value":
                 dict_movement[move_name] = movement_value(dict_data[data])
-            elif method == 'label':
+            elif method == "label":
                 dict_movement[move_name] = movement_label(dict_data[data])
             else:
                 print("The method can only be value or label")
@@ -136,7 +136,7 @@ class predict_movement():
             # print(type(dt.strftime("%Y-%m-%d")))
 
         # specify date here, create specified Date data
-        dataframe_date = pd.DataFrame({'Date': list_date})
+        dataframe_date = pd.DataFrame({"Date": list_date})
         dataframe_date.index = list_date
 
         # merge all the movements
@@ -147,8 +147,7 @@ class predict_movement():
             movement_data = dict_movement[movement]
             movement_data.columns = [movement]
             # print(movement_data)
-            result = result.merge(movement_data, left_index=True,
-                                  right_index=True)
+            result = result.merge(movement_data, left_index=True, right_index=True)
         # result = result.drop(columns=['Date'])
 
         self.dataframe = result

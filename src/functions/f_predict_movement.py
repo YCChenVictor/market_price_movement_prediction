@@ -18,7 +18,7 @@ def train_predict_split(inputs_outputs_dict, predict_periods=1):
     key_list = list(inputs_outputs_dict.keys())
 
     train_key_list = key_list[:-predict_periods]
-    test_key_list = key_list[(len(key_list)-predict_periods):len(key_list)]
+    test_key_list = key_list[(len(key_list) - predict_periods) : len(key_list)]
 
     for key in train_key_list:
         train_dict[key] = inputs_outputs_dict[key]
@@ -37,23 +37,34 @@ def recurrent_neural_network(x, chunk_size, n_chunks, rnn_size, layer):
     x = tf.reshape(x, [-1, chunk_size])
     x = tf.split(x, n_chunks, 0)
 
-    lstm_cell = rnn_cell.MultiRNNCell([rnn_cell.BasicLSTMCell(rnn_size),
-                                       rnn_cell.BasicLSTMCell(rnn_size)])
+    lstm_cell = rnn_cell.MultiRNNCell(
+        [rnn_cell.BasicLSTMCell(rnn_size), rnn_cell.BasicLSTMCell(rnn_size)]
+    )
 
     outputs, states = rnn.static_rnn(lstm_cell, x, dtype=tf.float32)
 
-    output = tf.matmul(outputs[-1], layer['weights']) + layer['biases']
+    output = tf.matmul(outputs[-1], layer["weights"]) + layer["biases"]
 
     return output
 
 
 # define function to train model
-def train_neural_network(x, y, tf_log, hm_epochs, saver, train_dict,
-                         chunk_size, n_chunks, rnn_size, layer, save_path):
+def train_neural_network(
+    x,
+    y,
+    tf_log,
+    hm_epochs,
+    saver,
+    train_dict,
+    chunk_size,
+    n_chunks,
+    rnn_size,
+    layer,
+    save_path,
+):
 
     # define required tensors
-    prediction = recurrent_neural_network(x, chunk_size, n_chunks, rnn_size,
-                                          layer)
+    prediction = recurrent_neural_network(x, chunk_size, n_chunks, rnn_size, layer)
     cost = tf.reduce_mean(tf.square(prediction - y))
     optimizer = tf.train.AdamOptimizer().minimize(cost)
 
@@ -87,8 +98,7 @@ def train_neural_network(x, y, tf_log, hm_epochs, saver, train_dict,
                 # print(epoch_y)
 
                 # start to train
-                _, c = sess.run([optimizer, cost],
-                                feed_dict={x: epoch_x, y: epoch_y})
+                _, c = sess.run([optimizer, cost], feed_dict={x: epoch_x, y: epoch_y})
                 # print(c)
                 epoch_loss += c
                 # print(epoch_loss)
@@ -131,25 +141,24 @@ def train_neural_network(x, y, tf_log, hm_epochs, saver, train_dict,
 
             print("==============")
 
-            accuracy = sum(accuracy_list)/len(accuracy_list)
+            accuracy = sum(accuracy_list) / len(accuracy_list)
 
-            print('the accuracy: ', accuracy)
+            print("the accuracy: ", accuracy)
 
             # save the trained session
             saver.save(sess, "check_point/model.ckpt")
 
-            print('Epoch', epoch, 'completed out of', hm_epochs,
-                  'loss:', epoch_loss)
+            print("Epoch", epoch, "completed out of", hm_epochs, "loss:", epoch_loss)
             print("===========================================")
 
-            with open(tf_log, 'a') as f:
-                f.write(str(epoch)+'\n')
+            with open(tf_log, "a") as f:
+                f.write(str(epoch) + "\n")
 
             epoch += 1
 
             # save the loss
             epoch_list.append(epoch_loss)
-            with open(save_path, 'wb') as f:
+            with open(save_path, "wb") as f:
                 pickle.dump(epoch_list, f)
 
             # print(epoch_list)
@@ -160,16 +169,16 @@ def train_neural_network(x, y, tf_log, hm_epochs, saver, train_dict,
 
 # use the function trained in train_neural_network() to make prediction with //
 # predict dataset
-def predict_neural_network(x, y, chunk_size, n_chunks, rnn_size, layer,
-                           hm_epochs, saver, predict_set):
+def predict_neural_network(
+    x, y, chunk_size, n_chunks, rnn_size, layer, hm_epochs, saver, predict_set
+):
     """
     should make sure whether it load the trained model accurately
     """
 
     tf.get_variable_scope().reuse_variables()
 
-    prediction = recurrent_neural_network(x, chunk_size, n_chunks, rnn_size,
-                                          layer)
+    prediction = recurrent_neural_network(x, chunk_size, n_chunks, rnn_size, layer)
 
     with tf.Session() as sess:
 
@@ -210,11 +219,11 @@ def predict_neural_network(x, y, chunk_size, n_chunks, rnn_size, layer,
             else:
                 accuracy_list.append(0)
 
-            print('predict_value:', prediction_value)
-            print('predict_bin', prediction_bin)
-            print('true_bin', output_data)
+            print("predict_value:", prediction_value)
+            print("predict_bin", prediction_bin)
+            print("true_bin", output_data)
 
         print("==============")
 
-        accuracy = sum(accuracy_list)/len(accuracy_list)
-        print('the accuracy: ', accuracy)
+        accuracy = sum(accuracy_list) / len(accuracy_list)
+        print("the accuracy: ", accuracy)

@@ -34,6 +34,7 @@ def minus_date(date, day):
 
     return date_add_days
 
+
 """
 # convert date format to string
 import datetime

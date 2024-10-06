@@ -9,13 +9,13 @@
 # 3. For LSTM prediction, predict the entire batch. Good news is that TensorFlow can share weights, so you can save the weights and use them in another graph to predict batch = 1.
 
 # batch, epoch & iteration
-'''
+"""
 epoch: When a complete dataset passes through a neural network and returns once, this process is called one epoch.
 batch: When it is not possible to pass the entire dataset through the neural network at once, the dataset is divided into several batches.
 iteration: An iteration is the number of times a batch needs to be completed to complete one epoch.
 
 For example, if there is a dataset with 2000 training samples and it is divided into batches of size 500, then it would take 4 iterations to complete one epoch.
-'''
+"""
 
 # Procedure:
 # 1. scrape finance data from yahoo finance
@@ -38,16 +38,16 @@ import functions.f_about_path as fap
 # count the elapsed time span, start time
 start_time = time.time()
 
-'''
+"""
 the relationship bet. batch, epoches:
-'''
+"""
 
-with open('prerequisite.json', 'r') as f:
+with open("prerequisite.json", "r") as f:
     prerequisite = json.load(f)
 
 # get the number of market prices and the num of elements of connectedness table
-target_folder = prerequisite['target_folder']
-save_path = './docs/' + target_folder
+target_folder = prerequisite["target_folder"]
+save_path = "./docs/" + target_folder
 num_of_files = sum([len(files) for r, d, files in os.walk(save_path)])
 num_table_elements = (num_of_files + 1) ** 2
 
@@ -80,23 +80,23 @@ print("turning data format into TFRecord")
 import flows.data_TFRecord_format as data_TFRecord_format
 
 # train model CNN (還在 version1)
-'''
+"""
 print("training model CNN")
 import train_model_CNN
-'''
+"""
 
 # train model RNN
-'''
+"""
 這邊要設計一個依照上次checkpoint後繼續training的選項
 print("training model RNN")
 import train_model_RNN
-'''
+"""
 
 # train model CNN_RNN (ConvLSTM) (還在 version1)
-'''
+"""
 print("training model CNN + RNN")
 import train_model_CNN_RNN
-'''
+"""
 
 # make prediction CNN
 
