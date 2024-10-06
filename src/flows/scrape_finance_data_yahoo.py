@@ -1,12 +1,5 @@
-from selenium import webdriver
 import pandas as pd
-from selenium.webdriver.chrome.options import Options
-import csv
-import os.path
-import datetime
-import os
 from ..functions.f_scrape_data import (
-    download_yahoo_quotes,
     get_historical_price_with_yfinace,
 )
 
@@ -62,7 +55,7 @@ for symbol in symbols:
     pd.DataFrame(result).to_csv(f"./docs/market_prices/{symbol}.csv")
     print(result)
 
-## The following is the old way
+# The following is the old way
 # # the current date
 # now = datetime.datetime.now()
 # year = now.year

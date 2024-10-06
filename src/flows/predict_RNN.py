@@ -36,7 +36,7 @@ with open("./docs/output_dict_test.pickle", "rb") as f:
 # append output_dict_test
 output_list_test = []
 for key, item in output_dict_test.items():
-    if item != None:
+    if item is not None:
         key_future = key
         continue
     else:

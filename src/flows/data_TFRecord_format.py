@@ -5,15 +5,11 @@ import json
 import pickle
 import pandas as pd
 import datetime
-import numpy as np
 import functions.f_date as fd
-import random
 
 
 from functions.f_rolling_connectedness import roll_conn_elements
 from functions.f_TFRecord import (
-    convert_to_TFRecord,
-    conn_table_periods_converter,
     split_dict_train_test,
     input_output_same_key,
     balance_label,
@@ -99,7 +95,8 @@ input_dict_train, output_dict_train = input_output_same_key(
 # balance label (avoid tendency to predict only one label)
 input_dict_train, output_dict_train = balance_label(input_dict_train, output_dict_train)
 
-# shuffle the input (output shuffled in tfrecord accordingly with the key in convert_to_TFRecord)
+# shuffle the input (output shuffled in tfrecord accordingly with the key in
+# convert_to_TFRecord)
 input_dict_train, output_dict_train = shuffle_input_dict(
     input_dict_train, output_dict_train
 )
@@ -111,7 +108,8 @@ input_dict_test, output_dict_test = input_output_same_key(test_flat_dict, moveme
 # balance label (avoid tendency to predict only one label)
 input_dict_test, output_dict_test = balance_label(input_dict_test, output_dict_test)
 
-# shuffle the input (output shuffled in tfrecord accordingly with the key in convert_to_TFRecord)
+# shuffle the input (output shuffled in tfrecord accordingly with the key in
+# convert_to_TFRecord)
 input_dict_test, output_dict_test = shuffle_input_dict(
     input_dict_test, output_dict_test
 )

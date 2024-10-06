@@ -1,5 +1,5 @@
 import tensorflow as tf
-from functions.f_train_model_RNN import extract_features, get_batched_dataset, get_model
+from functions.f_train_model_RNN import get_model
 import os
 import functions.f_about_path as fap
 import json

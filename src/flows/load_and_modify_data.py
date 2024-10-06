@@ -9,9 +9,8 @@ The procedure:
 import os
 import json
 import pandas as pd
-import pickle
-from dateutil.parser import isoparse
 import numpy as np
+import pickle
 
 # load Prerequisite
 file_dir = os.path.dirname(os.path.abspath(__file__))
