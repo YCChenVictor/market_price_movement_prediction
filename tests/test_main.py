@@ -32,7 +32,7 @@ async def test_read_root():
 @pytest.mark.asyncio
 async def test_write_data_success(sample_data):
     async with AsyncClient(app=app, base_url="http://test") as client:
-        with patch('main.write_api.write') as mock_write:
+        with patch('db.write_api.write') as mock_write:
             response = await client.post("/write/volatility/", json=sample_data)
             assert response.status_code == 200
             assert response.json() == {"message": "Volatility data written successfully."}

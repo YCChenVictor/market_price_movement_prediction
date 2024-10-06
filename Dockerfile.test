@@ -1,6 +1,6 @@
 # run test:
-# docker build -f Dockerfile.test -t myapp-test .
-# docker run --rm myapp-test
+# docker build -f Dockerfile.test -t market-price-movement-prediction-test .
+# docker run --rm market-price-movement-prediction-test
 
 FROM python:3.9-slim
 
