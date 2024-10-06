@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY requirements.txt .
 
+# Directly install the requirements without venv
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY src src
