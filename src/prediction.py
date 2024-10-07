@@ -9,6 +9,11 @@
 # train model (CNN, RNN, ConvLSTM)
 # predict movement (CNN, RNN, ConvLSTM)
 
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import json
 import os
 import time
