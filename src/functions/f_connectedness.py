@@ -50,7 +50,7 @@ def var_p_to_var_1(ai_list):
     lag = len(ai_list)
     n = nrow * lag
     ar1_coef_down = np.identity(n)
-    ar1_coef_down = np.delete(ar1_coef_down, np.s_[(n - nrow): n], 0)
+    ar1_coef_down = np.delete(ar1_coef_down, np.s_[(n - nrow) : n], 0)
     ar1_coef = np.vstack((ar1_coef, ar1_coef_down))
     return ar1_coef
 

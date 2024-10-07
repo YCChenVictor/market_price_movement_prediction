@@ -9,73 +9,119 @@
 # train model (CNN, RNN, ConvLSTM)
 # predict movement (CNN, RNN, ConvLSTM)
 
-import sys
-import os
+from flows.scrape_finance_data_yahoo import scrape_and_save_data
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+# # scrape finance data from yahoo finance
 
-import json
-import os
-import time
-import functions.f_about_path as fap
+# # modify data to deal with NAN and repeat data problem
+# print("modifying data")
+# import flows.load_and_modify_data as load_and_modify_data
 
-# scrape finance data from yahoo finance
-print("scraping finance data")
-import flows.scrape_finance_data_yahoo as scrape_finance_data_yahoo
+# # calculate volatilities
+# print("calculating volatilities")
+# import flows.calculate_volatility as calculate_volatility
 
-# modify data to deal with NAN and repeat data problem
-print("modifying data")
-import flows.load_and_modify_data as load_and_modify_data
+# # calculate movements (should have the option to select label or value)
+# print("calculating movements")
+# import flows.movement as movement
 
-# calculate volatilities
-print("calculating volatilities")
-import flows.calculate_volatility as calculate_volatility
+# # calculate rolling connectedness
+# if prerequisite["iscontinue_conn"]:
+#     print("add new rolling connectedness")
+#     import flows.add_roll_conn as add_roll_conn
+# else:
+#     print("calculating rolling connectedness")
+#     import flows.roll_conn as roll_conn
 
-# calculate movements (should have the option to select label or value)
-print("calculating movements")
-import flows.movement as movement
+# # Turn data into TFRecord format (這部分應該要先放棄，因為官方也說不清楚怎麼用tfrecord訓練模型)
+# print("turning data format into TFRecord")
+# import flows.data_TFRecord_format as data_TFRecord_format
 
-# calculate rolling connectedness
-if prerequisite["iscontinue_conn"]:
-    print("add new rolling connectedness")
-    import flows.add_roll_conn as add_roll_conn
-else:
-    print("calculating rolling connectedness")
-    import flows.roll_conn as roll_conn
+# # train model CNN (還在 version1)
+# """
+# print("training model CNN")
+# import train_model_CNN
+# """
 
-# Turn data into TFRecord format (這部分應該要先放棄，因為官方也說不清楚怎麼用tfrecord訓練模型)
-print("turning data format into TFRecord")
-import flows.data_TFRecord_format as data_TFRecord_format
+# # train model RNN
+# """
+# 這邊要設計一個依照上次checkpoint後繼續training的選項
+# print("training model RNN")
+# import train_model_RNN
+# """
 
-# train model CNN (還在 version1)
-"""
-print("training model CNN")
-import train_model_CNN
-"""
+# # train model CNN_RNN (ConvLSTM) (還在 version1)
+# """
+# print("training model CNN + RNN")
+# import train_model_CNN_RNN
+# """
 
-# train model RNN
-"""
-這邊要設計一個依照上次checkpoint後繼續training的選項
-print("training model RNN")
-import train_model_RNN
-"""
+# # make prediction CNN
 
-# train model CNN_RNN (ConvLSTM) (還在 version1)
-"""
-print("training model CNN + RNN")
-import train_model_CNN_RNN
-"""
+# # make prediction RNN
+# print("make prediction")
+# import flows.predict_RNN as predict_RNN
 
-# make prediction CNN
-
-# make prediction RNN
-print("make prediction")
-import flows.predict_RNN as predict_RNN
-
-# make prediction ConvLSTM
+# # make prediction ConvLSTM
 
 
-# count the elapsed time span, end time
-elapsed_time = time.time() - start_time
-print("the time span in all procedure: ", elapsed_time)
-print("===================")
+# # count the elapsed time span, end time
+# elapsed_time = time.time() - start_time
+# print("the time span in all procedure: ", elapsed_time)
+# print("===================")
+
+
+def main():
+    print("testing!!!")
+
+
+if __name__ == "__main__":
+    symbols = [
+        "AAPL",
+        "AMZN",
+        "AUDCAD=X",
+        "AUDCHF=X",
+        "AUDJPY=X",
+        "AUDNZD=X",
+        "AUDUSD=X",
+        # "^AXJO",
+        # "CADCHF=X",
+        # "CADJPY=X",
+        # "CHFJPY=X",
+        # "DX-Y.NYB",
+        # "EURAUD=X",
+        # "EURCAD=X",
+        # "EURCHF=X",
+        # "EURGBP=X",
+        # "EURJPY=X",
+        # "EURNZD=X",
+        # "EURUSD=X",
+        # "^STOXX50E",
+        # "GBPAUD=X",
+        # "GBPCAD=X",
+        # "GBPCHF=X",
+        # "GBPJPY=X",
+        # "GBPNZD=X",
+        # "GBPUSD=X",
+        # "^GDAXI",
+        # "GOOGL",
+        # "^N225",
+        # "MSFT",
+        # "NQ=F",
+        # "NZDCAD=X",
+        # "NZDCHF=X",
+        # "NZDJPY=X",
+        # "NZDUSD=X",
+        # "^SPX",
+        # "TSLA",
+        # "^FTSE",
+        # "USDCAD=X",
+        # "USDCHF=X",
+        # "USDJPY=X",
+        # "USO",
+        # "SI=F",
+        # "GC=F",
+    ]
+    print("scraping finance data")
+    scrape_and_save_data(symbols)
+    main()
