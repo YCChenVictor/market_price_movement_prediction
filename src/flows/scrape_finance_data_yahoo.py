@@ -1,5 +1,6 @@
 import yfinance as yf
 import pandas as pd
+import os
 
 
 def get_historical_price_with_yfinace(symbol):
@@ -16,7 +17,11 @@ def get_historical_price_with_yfinace(symbol):
 
 
 def scrape_and_save_data(symbols):
+    directory = "./docs/market_prices"
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
     for symbol in symbols:
         result = get_historical_price_with_yfinace(symbol)
         pd.DataFrame(result).to_csv(f"./docs/market_prices/{symbol}.csv")
-        print(result)

@@ -10,8 +10,7 @@
 # predict movement (CNN, RNN, ConvLSTM)
 
 from flows.scrape_finance_data_yahoo import scrape_and_save_data
-
-# # scrape finance data from yahoo finance
+from flows.load_and_modify_data import load_and_process_market_data
 
 # # modify data to deal with NAN and repeat data problem
 # print("modifying data")
@@ -71,57 +70,54 @@ from flows.scrape_finance_data_yahoo import scrape_and_save_data
 # print("===================")
 
 
-def main():
-    print("testing!!!")
-
-
 if __name__ == "__main__":
     symbols = [
-        "AAPL",
-        "AMZN",
+        # "AAPL",
+        # "AMZN",
         "AUDCAD=X",
         "AUDCHF=X",
         "AUDJPY=X",
         "AUDNZD=X",
-        "AUDUSD=X",
+        # "AUDUSD=X",
         # "^AXJO",
-        # "CADCHF=X",
-        # "CADJPY=X",
-        # "CHFJPY=X",
+        "CADCHF=X",
+        "CADJPY=X",
+        "CHFJPY=X",
         # "DX-Y.NYB",
-        # "EURAUD=X",
-        # "EURCAD=X",
-        # "EURCHF=X",
-        # "EURGBP=X",
-        # "EURJPY=X",
-        # "EURNZD=X",
+        "EURAUD=X",
+        "EURCAD=X",
+        "EURCHF=X",
+        "EURGBP=X",
+        "EURJPY=X",
+        "EURNZD=X",
         # "EURUSD=X",
         # "^STOXX50E",
-        # "GBPAUD=X",
-        # "GBPCAD=X",
-        # "GBPCHF=X",
-        # "GBPJPY=X",
-        # "GBPNZD=X",
+        "GBPAUD=X",
+        "GBPCAD=X",
+        "GBPCHF=X",
+        "GBPJPY=X",
+        "GBPNZD=X",
         # "GBPUSD=X",
         # "^GDAXI",
         # "GOOGL",
         # "^N225",
         # "MSFT",
         # "NQ=F",
-        # "NZDCAD=X",
-        # "NZDCHF=X",
-        # "NZDJPY=X",
+        "NZDCAD=X",
+        "NZDCHF=X",
+        "NZDJPY=X",
         # "NZDUSD=X",
         # "^SPX",
         # "TSLA",
         # "^FTSE",
-        # "USDCAD=X",
-        # "USDCHF=X",
-        # "USDJPY=X",
+        "USDCAD=X",
+        "USDCHF=X",
+        "USDJPY=X",
         # "USO",
         # "SI=F",
         # "GC=F",
     ]
     print("scraping finance data")
     scrape_and_save_data(symbols)
-    main()
+    print("modifying data")
+    load_and_process_market_data("docs/market_prices/")
