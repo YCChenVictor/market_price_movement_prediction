@@ -9,12 +9,10 @@
 # train model (CNN, RNN, ConvLSTM)
 # predict movement (CNN, RNN, ConvLSTM)
 
+import pandas as pd
 from scrape_finance_data_yahoo import scrape_and_save_data
 from load_and_modify_data import load_and_process_market_data
-
-# # calculate volatilities
-# print("calculating volatilities")
-# import flows.calculate_volatility as calculate_volatility
+from multi_time_series_connectedness import Volatility, Connectedness, RollingConnectedness
 
 # # calculate movements (should have the option to select label or value)
 # print("calculating movements")
@@ -113,7 +111,19 @@ if __name__ == "__main__":
         # "SI=F",
         # "GC=F",
     ]
-    print("scraping finance data")
-    scrape_and_save_data(symbols)
+    # print("scraping finance data")
+    # scrape_and_save_data(symbols)
     print("modifying data")
     load_and_process_market_data("docs/market_prices/")
+    print("calculating volatilities")
+    volatility = Volatility(n=2)
+    volatility.calculate("2024-10-09T00:00:00+01:00", "2024-10-09T09:59:00+01:00", "docs/market_prices", "docs/volatilities.pickle")
+
+    print("calculate full connectedness")
+    volatilities = pd.read_pickle("docs/volatilities.pickle")
+    connectedness = Connectedness(volatilities)
+    connectedness.calculate()
+
+    roll_conn = RollingConnectedness(volatilities.dropna(), 20, 80)
+    roll_conn.divide_timeseries_volatilities()
+    roll_conn.calculate("docs/roll_conn.pickle")
