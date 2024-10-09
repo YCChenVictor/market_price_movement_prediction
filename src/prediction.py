@@ -9,12 +9,8 @@
 # train model (CNN, RNN, ConvLSTM)
 # predict movement (CNN, RNN, ConvLSTM)
 
-from flows.scrape_finance_data_yahoo import scrape_and_save_data
-from flows.load_and_modify_data import load_and_process_market_data
-
-# # modify data to deal with NAN and repeat data problem
-# print("modifying data")
-# import flows.load_and_modify_data as load_and_modify_data
+from scrape_finance_data_yahoo import scrape_and_save_data
+from load_and_modify_data import load_and_process_market_data
 
 # # calculate volatilities
 # print("calculating volatilities")
