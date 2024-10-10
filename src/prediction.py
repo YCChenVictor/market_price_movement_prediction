@@ -1,113 +1,140 @@
-# conclusion:
-# 1. CNN cannot be used (training accuracy cannot increase)
-# 2. LSTM can still be used (training accuracy can reach 100%)
-# 3. Convert CNN_LSTM to ConvLSTM
-
-# problem:
-# 1. Change CNN_LSTM to ConvLSTM
-# 2. Visualize loss and accuracy
-# 3. For LSTM prediction, predict the entire batch. Good news is that TensorFlow can share weights, so you can save the weights and use them in another graph to predict batch = 1.
-
-# batch, epoch & iteration
-"""
-epoch: When a complete dataset passes through a neural network and returns once, this process is called one epoch.
-batch: When it is not possible to pass the entire dataset through the neural network at once, the dataset is divided into several batches.
-iteration: An iteration is the number of times a batch needs to be completed to complete one epoch.
-
-For example, if there is a dataset with 2000 training samples and it is divided into batches of size 500, then it would take 4 iterations to complete one epoch.
-"""
-
-# Procedure:
-# 1. scrape finance data from yahoo finance
-# 2. scrape finance data from investing.com (now manually)
-# 3. modify data to deal with NAN and repeat data problem
-# 4. calculate volatility
-# 5. calculate movements (should have the option to select label or value in the future)
-# 6. calculate rolling connectedness (should try to increase the speed in the future)
-# 7. add rolling connectedness (used only when there is new connectedness)
-# 8. Turn data into TFRecord format
-# 9. train model (CNN, RNN, ConvLSTM)
-# 10. predict movement (CNN, RNN, ConvLSTM)
-
-# import required module
-import json
-import os
-import time
-import functions.f_about_path as fap
-
-# count the elapsed time span, start time
-start_time = time.time()
-
-"""
-the relationship bet. batch, epoches:
-"""
-
-with open("prerequisite.json", "r") as f:
-    prerequisite = json.load(f)
-
-# get the number of market prices and the num of elements of connectedness table
-target_folder = prerequisite["target_folder"]
-save_path = "./docs/" + target_folder
-num_of_files = sum([len(files) for r, d, files in os.walk(save_path)])
-num_table_elements = (num_of_files + 1) ** 2
-
+# Process:
 # scrape finance data from yahoo finance
-print("scraping finance data")
-import flows.scrape_finance_data_yahoo as scrape_finance_data_yahoo
-
 # modify data to deal with NAN and repeat data problem
-print("modifying data")
-import flows.load_and_modify_data as load_and_modify_data
-
-# calculate volatilities
-print("calculating volatilities")
-import flows.calculate_volatility as calculate_volatility
-
-# calculate movements (should have the option to select label or value)
-print("calculating movements")
-import flows.movement as movement
-
+# calculate volatility
+# calculate movements
 # calculate rolling connectedness
-if prerequisite["iscontinue_conn"]:
-    print("add new rolling connectedness")
-    import flows.add_roll_conn as add_roll_conn
-else:
-    print("calculating rolling connectedness")
-    import flows.roll_conn as roll_conn
+# add rolling connectedness (used only when there is new connectedness)
+# Turn data into TFRecord format
+# train model (CNN, RNN, ConvLSTM)
+# predict movement (CNN, RNN, ConvLSTM)
 
-# Turn data into TFRecord format (這部分應該要先放棄，因為官方也說不清楚怎麼用tfrecord訓練模型)
-print("turning data format into TFRecord")
-import flows.data_TFRecord_format as data_TFRecord_format
+import pandas as pd
+from scrape_finance_data_yahoo import scrape_and_save_data
+from load_and_modify_data import load_and_process_market_data
+from multi_time_series_connectedness import Volatility, Connectedness, RollingConnectedness
+from movement import Movement
+from model_trainer import ModelTrainer
 
-# train model CNN (還在 version1)
-"""
-print("training model CNN")
-import train_model_CNN
-"""
+# # Turn data into TFRecord format
+# print("turning data format into TFRecord")
+# import flows.data_TFRecord_format as data_TFRecord_format
 
-# train model RNN
-"""
-這邊要設計一個依照上次checkpoint後繼續training的選項
-print("training model RNN")
-import train_model_RNN
-"""
+# # train model CNN (還在 version1)
+# """
+# print("training model CNN")
+# import train_model_CNN
+# """
 
-# train model CNN_RNN (ConvLSTM) (還在 version1)
-"""
-print("training model CNN + RNN")
-import train_model_CNN_RNN
-"""
+# # train model RNN
+# """
+# 這邊要設計一個依照上次checkpoint後繼續training的選項
+# print("training model RNN")
+# import train_model_RNN
+# """
 
-# make prediction CNN
+# # train model CNN_RNN (ConvLSTM) (還在 version1)
+# """
+# print("training model CNN + RNN")
+# import train_model_CNN_RNN
+# """
 
-# make prediction RNN
-print("make prediction")
-import flows.predict_RNN as predict_RNN
+# # make prediction CNN
 
-# make prediction ConvLSTM
+# # make prediction RNN
+# print("make prediction")
+# import flows.predict_RNN as predict_RNN
+
+# # make prediction ConvLSTM
 
 
-# count the elapsed time span, end time
-elapsed_time = time.time() - start_time
-print("the time span in all procedure: ", elapsed_time)
-print("===================")
+# # count the elapsed time span, end time
+# elapsed_time = time.time() - start_time
+# print("the time span in all procedure: ", elapsed_time)
+# print("===================")
+
+
+if __name__ == "__main__":
+    symbols = [
+        # "AAPL",
+        # "AMZN",
+        "AUDCAD=X",
+        "AUDCHF=X",
+        "AUDJPY=X",
+        "AUDNZD=X",
+        # "AUDUSD=X",
+        # "^AXJO",
+        "CADCHF=X",
+        "CADJPY=X",
+        "CHFJPY=X",
+        # "DX-Y.NYB",
+        "EURAUD=X",
+        "EURCAD=X",
+        "EURCHF=X",
+        "EURGBP=X",
+        "EURJPY=X",
+        "EURNZD=X",
+        # "EURUSD=X",
+        # "^STOXX50E",
+        "GBPAUD=X",
+        "GBPCAD=X",
+        "GBPCHF=X",
+        "GBPJPY=X",
+        "GBPNZD=X",
+        # "GBPUSD=X",
+        # "^GDAXI",
+        # "GOOGL",
+        # "^N225",
+        # "MSFT",
+        # "NQ=F",
+        "NZDCAD=X",
+        "NZDCHF=X",
+        "NZDJPY=X",
+        # "NZDUSD=X",
+        # "^SPX",
+        # "TSLA",
+        # "^FTSE",
+        "USDCAD=X",
+        "USDCHF=X",
+        "USDJPY=X",
+        # "USO",
+        # "SI=F",
+        # "GC=F",
+    ]
+    # print("scraping finance data")
+    # scrape_and_save_data(symbols)
+    # print("modifying data")
+    # load_and_process_market_data("docs/market_prices/")
+    # print("calculating volatilities")
+    # volatility = Volatility(n=2)
+    # volatility.calculate("2024-10-09T00:00:00+01:00", "2024-10-09T09:59:00+01:00", "docs/market_prices", "docs/volatilities.pickle")
+
+    # print("calculate full connectedness")
+    # volatilities = pd.read_pickle("docs/volatilities.pickle")
+    # print(volatilities)
+    # connectedness = Connectedness(volatilities)
+    # connectedness.calculate()
+
+    # print("calculate rolling connectedness")
+    # roll_conn = RollingConnectedness(volatilities.dropna(), 20, 80)
+    # roll_conn.divide_timeseries_volatilities()
+    # roll_conn.calculate("docs/roll_conn.pickle")
+
+    # print("calculate movements")
+    # movement = Movement("docs/market_prices/AUDCAD=X.csv", "docs/movement.pickle")
+    # movement.get_movements("value")
+    # movement.store()
+
+    # print("train LSTM model")
+    with open("docs/movement.pickle", "rb") as f:
+        movement = pd.read_pickle(f)
+    with open("docs/roll_conn.pickle", "rb") as f:
+        roll_conn = pd.read_pickle(f)
+    model_trainer = ModelTrainer(movement, roll_conn)
+    model_trainer.match(5)
+    model_trainer.train()
+
+    # print("predict movements")
+    # data_to_predict -> It will be the same format of the connectedness, so actually, there some be two threads on parallel, one keeps training the model, one keeps predicting the movements
+    # predictions = model_trainer.predict(data_to_predict)
+
