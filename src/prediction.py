@@ -132,6 +132,9 @@ if __name__ == "__main__":
         roll_conn = pd.read_pickle(f)
     model_trainer = ModelTrainer(movement, roll_conn)
     model_trainer.match(5)
-    # model_trainer.train()
+    model_trainer.train()
 
     # print("predict movements")
+    # data_to_predict -> It will be the same format of the connectedness, so actually, there some be two threads on parallel, one keeps training the model, one keeps predicting the movements
+    # predictions = model_trainer.predict(data_to_predict)
+

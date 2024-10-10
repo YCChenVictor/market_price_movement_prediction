@@ -1,4 +1,6 @@
 import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
 
 class ModelTrainer:
     def __init__(self, target, features): 
@@ -26,10 +28,17 @@ class ModelTrainer:
         self.match_target_features = match_target_features
 
     def train(self):
-        X_train = np.random.rand(100, 10, 3)
-        y_train = np.random.randint(0, 2, size=(100, 1))
-        print(X_train[0])
-        print(y_train[0])
-        print(self.features)
-        print(self.target)
-        # self.model.fit(self.features, self.target, epochs=epochs, batch_size=batch_size)
+        Y_train = []
+        X_train = []
+        for key, value in self.match_target_features.items():
+            modified_feature = value[1].drop(columns=["forecast_at", "end_at", "start_at"]).to_numpy()
+            Y_train.append(value[0].iat[0, value[0].columns.get_loc("Movement")])
+            X_train.append(modified_feature)
+        X_train = np.array(X_train)
+        Y_train = np.array(Y_train)
+        print(X_train[0].shape)
+        model = Sequential()
+        model.add(LSTM(50, input_shape=X_train[0].shape))
+        model.add(Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        model.fit(X_train, Y_train, epochs=10, batch_size=32)
