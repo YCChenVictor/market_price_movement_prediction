@@ -29,8 +29,8 @@ class Movement:
 
     def calculate_movement_in_value(self, dataframe):
         result = dataframe.apply(lambda row: row["Close"] - row["Open"], axis=1).to_frame()
-        result.columns = ["Movement"]
-        result["Time"] = dataframe["time"]
+        result.columns = ["Movement"] # use movement instead
+        result["Time"] = dataframe["time"] # use time instead
         return result
     
     def calculate_movement_in_label(dataframe):

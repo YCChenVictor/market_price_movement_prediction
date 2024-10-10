@@ -764,13 +764,13 @@ files = [
 
 [[package]]
 name = "multi-time-series-connectedness"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "multi_time_series_connectedness-0.1.1-py3-none-any.whl", hash = "sha256:e3db930b52b28e36f378723bef3f8a32ed6f5901c480633a367e3e2c574d0e6e"},
-    {file = "multi_time_series_connectedness-0.1.1.tar.gz", hash = "sha256:a0efcc6d9ab2bbc690c59d05a4286e2c8182a9a88ea13e56e031937ca56067aa"},
+    {file = "multi_time_series_connectedness-0.1.2-py3-none-any.whl", hash = "sha256:6f0bd8328c988db098cf4b6568bba3fb6fbc9e0ab5ef8520cbd688d70ce913a5"},
+    {file = "multi_time_series_connectedness-0.1.2.tar.gz", hash = "sha256:e0fcce6e7ade2729d897a12c5b21f9daafe30df5c287796b55b682baf3b85fea"},
 ]
 
 [package.dependencies]
@@ -1580,4 +1580,4 @@ repair = ["scipy (>=1.6.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "013ced788e777693c21aef08899bfb7716e30e8f8e72981dbb5b52ac4e4f932b"
+content-hash = "c1f247e6a82664635fa1f0d3673bd1307eb45c378f8161f37657cc135f1ef972"

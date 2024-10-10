@@ -14,6 +14,7 @@ from scrape_finance_data_yahoo import scrape_and_save_data
 from load_and_modify_data import load_and_process_market_data
 from multi_time_series_connectedness import Volatility, Connectedness, RollingConnectedness
 from movement import Movement
+from model_trainer import ModelTrainer
 
 # # Turn data into TFRecord format
 # print("turning data format into TFRecord")
@@ -124,8 +125,13 @@ if __name__ == "__main__":
     # movement.get_movements("value")
     # movement.store()
 
-    # # save the volatility_dataframe into pickle
-    # file_path = os.path.dirname(os.path.realpath(__file__))
-    # save_path = file_path + "/docs/" + "movement.pickle"
-    # with open(save_path, "wb") as f:
-    #     pickle.dump(movement_dataframe, f)
+    # print("train LSTM model")
+    with open("docs/movement.pickle", "rb") as f:
+        movement = pd.read_pickle(f)
+    with open("docs/roll_conn.pickle", "rb") as f:
+        roll_conn = pd.read_pickle(f)
+    model_trainer = ModelTrainer(movement, roll_conn)
+    model_trainer.match(5)
+    # model_trainer.train()
+
+    # print("predict movements")
