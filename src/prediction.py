@@ -13,20 +13,9 @@ import pandas as pd
 from scrape_finance_data_yahoo import scrape_and_save_data
 from load_and_modify_data import load_and_process_market_data
 from multi_time_series_connectedness import Volatility, Connectedness, RollingConnectedness
+from movement import Movement
 
-# # calculate movements (should have the option to select label or value)
-# print("calculating movements")
-# import flows.movement as movement
-
-# # calculate rolling connectedness
-# if prerequisite["iscontinue_conn"]:
-#     print("add new rolling connectedness")
-#     import flows.add_roll_conn as add_roll_conn
-# else:
-#     print("calculating rolling connectedness")
-#     import flows.roll_conn as roll_conn
-
-# # Turn data into TFRecord format (這部分應該要先放棄，因為官方也說不清楚怎麼用tfrecord訓練模型)
+# # Turn data into TFRecord format
 # print("turning data format into TFRecord")
 # import flows.data_TFRecord_format as data_TFRecord_format
 
@@ -113,17 +102,30 @@ if __name__ == "__main__":
     ]
     # print("scraping finance data")
     # scrape_and_save_data(symbols)
-    print("modifying data")
-    load_and_process_market_data("docs/market_prices/")
-    print("calculating volatilities")
-    volatility = Volatility(n=2)
-    volatility.calculate("2024-10-09T00:00:00+01:00", "2024-10-09T09:59:00+01:00", "docs/market_prices", "docs/volatilities.pickle")
+    # print("modifying data")
+    # load_and_process_market_data("docs/market_prices/")
+    # print("calculating volatilities")
+    # volatility = Volatility(n=2)
+    # volatility.calculate("2024-10-09T00:00:00+01:00", "2024-10-09T09:59:00+01:00", "docs/market_prices", "docs/volatilities.pickle")
 
-    print("calculate full connectedness")
-    volatilities = pd.read_pickle("docs/volatilities.pickle")
-    connectedness = Connectedness(volatilities)
-    connectedness.calculate()
+    # print("calculate full connectedness")
+    # volatilities = pd.read_pickle("docs/volatilities.pickle")
+    # print(volatilities)
+    # connectedness = Connectedness(volatilities)
+    # connectedness.calculate()
 
-    roll_conn = RollingConnectedness(volatilities.dropna(), 20, 80)
-    roll_conn.divide_timeseries_volatilities()
-    roll_conn.calculate("docs/roll_conn.pickle")
+    # print("calculate rolling connectedness")
+    # roll_conn = RollingConnectedness(volatilities.dropna(), 20, 80)
+    # roll_conn.divide_timeseries_volatilities()
+    # roll_conn.calculate("docs/roll_conn.pickle")
+
+    # print("calculate movements")
+    # movement = Movement("docs/market_prices/AUDCAD=X.csv", "docs/movement.pickle")
+    # movement.get_movements("value")
+    # movement.store()
+
+    # # save the volatility_dataframe into pickle
+    # file_path = os.path.dirname(os.path.realpath(__file__))
+    # save_path = file_path + "/docs/" + "movement.pickle"
+    # with open(save_path, "wb") as f:
+    #     pickle.dump(movement_dataframe, f)
