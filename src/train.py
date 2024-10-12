@@ -1,0 +1,69 @@
+# Process:
+# scrape finance data from yahoo finance
+# modify data to deal with NAN and repeat data problem
+# calculate volatility
+# calculate movements
+# calculate rolling connectedness
+# add rolling connectedness (used only when there is new connectedness)
+# Turn data into TFRecord format
+# train model (CNN, RNN, ConvLSTM)
+# predict movement (CNN, RNN, ConvLSTM)
+
+import pandas as pd
+from scrape_finance_data_yahoo import scrape_and_save_data
+from etl import ETL
+from multi_time_series_connectedness import Volatility, Connectedness, RollingConnectedness
+from movement import Movement
+from model_trainer import ModelTrainer
+import argparse
+import sys
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Script with array and other variables")
+    parser.add_argument('--train_tickers', nargs='+', type=str, help="Array of tickers to train the model")
+    parser.add_argument('--data_dir', type=str, help="Directory to save the data")
+    args = parser.parse_args()
+    train_tickers = args.train_tickers
+    data_dir = args.data_dir
+    print(f"Features Array: {train_tickers}")
+
+    print("scraping finance data")
+    scrape_and_save_data(train_tickers)
+
+    print("modifying data")
+    etl = ETL(data_dir)
+    etl.process()
+
+    print("calculating volatilities")
+    volatility = Volatility(n=2)
+    volatility.calculate("docs/market_prices", "docs/volatilities.pickle")
+
+    print("calculate full connectedness")
+    volatilities = pd.read_pickle("docs/volatilities.pickle")
+    connectedness = Connectedness(volatilities)
+    connectedness.calculate()
+
+    print("calculate rolling connectedness")
+    roll_conn = RollingConnectedness(volatilities.dropna(), 20, 80)
+    roll_conn.divide_timeseries_volatilities()
+    roll_conn.calculate("docs/roll_conn.pickle")
+
+    print("calculate movements")
+    movement = Movement("docs/market_prices/AUDCAD=X.csv", "docs/movement.pickle")
+    movement.get_movements("value")
+    movement.store()
+
+    # print("train LSTM model")
+    with open("docs/movement.pickle", "rb") as f:
+        movement = pd.read_pickle(f)
+    with open("docs/roll_conn.pickle", "rb") as f:
+        roll_conn = pd.read_pickle(f)
+    model_trainer = ModelTrainer(movement, roll_conn)
+    model_trainer.match(5)
+    model_trainer.train()
+
+    # print("predict movements")
+    # data_to_predict -> It will be the same format of the connectedness, so actually, there some be two threads on parallel, one keeps training the model, one keeps predicting the movements
+    # predictions = model_trainer.predict(data_to_predict)
+
