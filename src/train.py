@@ -39,13 +39,15 @@ if __name__ == "__main__":
 
     print("calculating volatilities")
     volatility = Volatility(n=2)
-    volatility.calculate("docs/market_prices/train", "2024-10-11 00:00:00+01:00", "2024-10-11 22:00:00+01:00", "docs/volatilities.pickle")
+    volatility.calculate("docs/market_prices/train", "2024-10-11 00:00:00+01:00", "2024-10-11 22:29:00+01:00", "docs/volatilities.pickle")
 
     print("calculate rolling connectedness")
     volatilities = pd.read_pickle("docs/volatilities.pickle")
-    roll_conn = RollingConnectedness(volatilities.dropna(), 20, 80)
-    roll_conn.divide_timeseries_volatilities()
-    roll_conn.calculate("docs/roll_conn.pickle")
+    print(volatilities)
+    max_lag = 20
+    periods_per_volatility = 80
+    roll_conn = RollingConnectedness(volatilities.dropna(), max_lag, periods_per_volatility, "2024-10-11 01:21:00+01:00", "2024-10-11 22:00:00+01:00")
+    roll_conn.calculate("docs/train/roll_conn.pickle")
 
     print("calculate movements")
     movement = Movement(f"docs/market_prices/train/{train_predict_ticker}.csv", "docs/movement.pickle")
@@ -53,9 +55,9 @@ if __name__ == "__main__":
     movement.store()
 
     print("train LSTM model")
-    with open("docs/movement.pickle", "rb") as f:
+    with open("docs/train/movement.pickle", "rb") as f:
         movement = pd.read_pickle(f)
-    with open("docs/roll_conn.pickle", "rb") as f:
+    with open("docs/train/roll_conn.pickle", "rb") as f:
         roll_conn = pd.read_pickle(f)
     model_trainer = ModelTrainer(movement, roll_conn, 5, train_tickers)
     model_trainer.match()

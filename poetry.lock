@@ -1128,13 +1128,13 @@ dev = ["absl-py", "pyink", "pylint (>=2.6.0)", "pytest", "pytest-xdist"]
 
 [[package]]
 name = "multi-time-series-connectedness"
-version = "0.1.4"
+version = "0.1.7"
 description = ""
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "multi_time_series_connectedness-0.1.4-py3-none-any.whl", hash = "sha256:eacc2185730f4a7d68cc2d604db60b0ec697c4792faeb15f8af4ebba9b8d24a5"},
-    {file = "multi_time_series_connectedness-0.1.4.tar.gz", hash = "sha256:d163eae92bb412e6eb68c9fa196c077d9e1fee9731692e9d450da92cf4b184a9"},
+    {file = "multi_time_series_connectedness-0.1.7-py3-none-any.whl", hash = "sha256:f97e371d0085f57dd2067036a8a7f8bfc67931186d2af55bf4ee0edb5cc67b69"},
+    {file = "multi_time_series_connectedness-0.1.7.tar.gz", hash = "sha256:028b43bdb6b5b63463d2f99272d350dcbb73ca1d9a6b7a73466f534365875846"},
 ]
 
 [package.dependencies]
@@ -2356,4 +2356,4 @@ repair = ["scipy (>=1.6.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a3fc320b71d6fd3a99c32fc90a8dc1b738626bcef6c187fbc9b66090e4ce4c07"
+content-hash = "49aa1ca1f7f9ce8cb55be16b96dc1c11c2eaeaaf81aca38a1206d4b4fe0aab99"
