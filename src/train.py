@@ -21,23 +21,25 @@ import sys
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script with array and other variables")
-    parser.add_argument('--train_tickers', nargs='+', type=str, help="Array of tickers to train the model")
-    parser.add_argument('--data_dir', type=str, help="Directory to save the data")
+    parser.add_argument('--train_features_tickers', nargs='+', type=str, help="Array of tickers to train the model")
+    parser.add_argument('--train_data_dir', type=str, help="Directory to save the data")
+    parser.add_argument('--train_predict_ticker', type=str, help="Ticker to predict the movement")
     args = parser.parse_args()
-    train_tickers = args.train_tickers
-    data_dir = args.data_dir
+    train_tickers = args.train_features_tickers
+    train_data_dir = args.train_data_dir
+    train_predict_ticker = args.train_predict_ticker
     print(f"Features Array: {train_tickers}")
 
     print("scraping finance data")
-    scrape_and_save_data(train_tickers)
+    scrape_and_save_data(train_tickers, train_data_dir)
 
     print("modifying data")
-    etl = ETL(data_dir)
+    etl = ETL(train_data_dir)
     etl.process()
 
     print("calculating volatilities")
     volatility = Volatility(n=2)
-    volatility.calculate("docs/market_prices", "docs/volatilities.pickle")
+    volatility.calculate("docs/market_prices/train", "docs/volatilities.pickle")
 
     print("calculate full connectedness")
     volatilities = pd.read_pickle("docs/volatilities.pickle")
@@ -50,17 +52,17 @@ if __name__ == "__main__":
     roll_conn.calculate("docs/roll_conn.pickle")
 
     print("calculate movements")
-    movement = Movement("docs/market_prices/AUDCAD=X.csv", "docs/movement.pickle")
+    movement = Movement(f"docs/market_prices/train/{train_predict_ticker}.csv", "docs/movement.pickle")
     movement.get_movements("value")
     movement.store()
 
-    # print("train LSTM model")
+    print("train LSTM model")
     with open("docs/movement.pickle", "rb") as f:
         movement = pd.read_pickle(f)
     with open("docs/roll_conn.pickle", "rb") as f:
         roll_conn = pd.read_pickle(f)
-    model_trainer = ModelTrainer(movement, roll_conn)
-    model_trainer.match(5)
+    model_trainer = ModelTrainer(movement, roll_conn, 5)
+    model_trainer.match()
     model_trainer.train()
 
     # print("predict movements")

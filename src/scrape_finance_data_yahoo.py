@@ -16,12 +16,10 @@ def get_historical_price_with_yfinace(symbol):
     return historical_price_data
 
 
-def scrape_and_save_data(symbols):
-    directory = "./docs/market_prices"
-
+def scrape_and_save_data(symbols, directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     for symbol in symbols:
         result = get_historical_price_with_yfinace(symbol)
-        pd.DataFrame(result).to_csv(f"./docs/market_prices/{symbol}.csv")
+        pd.DataFrame(result).to_csv(f"{directory}/{symbol}.csv")

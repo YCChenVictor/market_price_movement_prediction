@@ -3,18 +3,19 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 
 class ModelTrainer:
-    def __init__(self, target, features): 
+    def __init__(self, target, features, steps):
+        self.steps = steps
         self.target = target
         self.features = features
         self.match_target_features = None
 
-    def match(self, steps):
+    def match(self):
         print("matching")
         # you need to divide it into several steps,
         # I think you should have key, timestamp items, [steps, movement]
         match_target_features = {}
         start_index = 0
-        end_index = steps
+        end_index = self.steps
         forecast_row_index = 0
         while(forecast_row_index < len(self.features)):
             current_features = self.features.iloc[start_index:end_index]
@@ -36,7 +37,6 @@ class ModelTrainer:
             X_train.append(modified_feature)
         X_train = np.array(X_train)
         Y_train = np.array(Y_train)
-        print(X_train[0].shape)
         model = Sequential()
         model.add(LSTM(50, input_shape=X_train[0].shape))
         model.add(Dense(1, activation='sigmoid'))
