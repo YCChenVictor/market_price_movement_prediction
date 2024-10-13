@@ -1,9 +1,12 @@
+import os
+import json
 import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 
 class ModelTrainer:
-    def __init__(self, target, features, steps):
+    def __init__(self, target, features, steps, feature_tickers):
+        self.feature_tickers = feature_tickers
         self.steps = steps
         self.target = target
         self.features = features
@@ -42,3 +45,12 @@ class ModelTrainer:
         model.add(Dense(1, activation='sigmoid'))
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
         model.fit(X_train, Y_train, epochs=10, batch_size=32)
+
+        model_path = 'docs/model.keras'
+        model.save(model_path)
+        feature_metadata = {
+            'feature_tickers': self.feature_tickers,
+            'model_path': model_path
+        }
+        with open('docs/trained_model_metadata.json', 'w') as f:
+            json.dump(feature_metadata, f)

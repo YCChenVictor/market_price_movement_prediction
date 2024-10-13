@@ -39,14 +39,10 @@ if __name__ == "__main__":
 
     print("calculating volatilities")
     volatility = Volatility(n=2)
-    volatility.calculate("docs/market_prices/train", "docs/volatilities.pickle")
-
-    print("calculate full connectedness")
-    volatilities = pd.read_pickle("docs/volatilities.pickle")
-    connectedness = Connectedness(volatilities)
-    connectedness.calculate()
+    volatility.calculate("docs/market_prices/train", "2024-10-11 00:00:00+01:00", "2024-10-11 22:00:00+01:00", "docs/volatilities.pickle")
 
     print("calculate rolling connectedness")
+    volatilities = pd.read_pickle("docs/volatilities.pickle")
     roll_conn = RollingConnectedness(volatilities.dropna(), 20, 80)
     roll_conn.divide_timeseries_volatilities()
     roll_conn.calculate("docs/roll_conn.pickle")
@@ -61,7 +57,7 @@ if __name__ == "__main__":
         movement = pd.read_pickle(f)
     with open("docs/roll_conn.pickle", "rb") as f:
         roll_conn = pd.read_pickle(f)
-    model_trainer = ModelTrainer(movement, roll_conn, 5)
+    model_trainer = ModelTrainer(movement, roll_conn, 5, train_tickers)
     model_trainer.match()
     model_trainer.train()
 
