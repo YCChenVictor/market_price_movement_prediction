@@ -11,6 +11,12 @@ INFLUXDB_TOKEN = os.getenv("INFLUXDB_TOKEN")
 INFLUXDB_ORG = os.getenv("INFLUXDB_ORG")
 INFLUXDB_BUCKET = os.getenv("INFLUXDB_BUCKET")
 
+print("testing!!!")
+print(INFLUXDB_URL)
+print(INFLUXDB_TOKEN)
+print(INFLUXDB_ORG)
+print(INFLUXDB_BUCKET)
+
 # Initialize InfluxDB client
 client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=INFLUXDB_ORG)
 write_api = client.write_api()
