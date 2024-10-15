@@ -14,13 +14,11 @@ from scrape_finance_data_yahoo import scrape_and_save_data
 from etl import ETL
 from multi_time_series_connectedness import (
     Volatility,
-    Connectedness,
     RollingConnectedness,
 )
 from movement import Movement
 from model_trainer import ModelTrainer
 import argparse
-import sys
 
 
 if __name__ == "__main__":
@@ -88,7 +86,3 @@ if __name__ == "__main__":
     model_trainer = ModelTrainer(movement, roll_conn, 5, train_tickers)
     model_trainer.match()
     model_trainer.train()
-
-    # print("predict movements")
-    # data_to_predict -> It will be the same format of the connectedness, so actually, there some be two threads on parallel, one keeps training the model, one keeps predicting the movements
-    # predictions = model_trainer.predict(data_to_predict)

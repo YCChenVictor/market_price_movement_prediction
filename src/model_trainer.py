@@ -1,4 +1,3 @@
-import os
 import json
 import numpy as np
 from tensorflow.keras.models import Sequential
