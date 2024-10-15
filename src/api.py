@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from influxdb_client import Point, WritePrecision
-from db import write_api, INFLUXDB_BUCKET, INFLUXDB_ORG
+from src.db import write_api, INFLUXDB_BUCKET, INFLUXDB_ORG
 
 app = FastAPI()
 

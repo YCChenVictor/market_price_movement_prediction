@@ -1,7 +1,7 @@
 import pandas as pd
 import datetime
-import os
 import pickle
+
 
 def daterange(date1, date2):
     """
@@ -28,11 +28,13 @@ class Movement:
         self.movement_in_label = None
 
     def calculate_movement_in_value(self, dataframe):
-        result = dataframe.apply(lambda row: row["Close"] - row["Open"], axis=1).to_frame()
-        result.columns = ["Movement"] # use movement instead
-        result["Time"] = dataframe["time"] # use time instead
+        result = dataframe.apply(
+            lambda row: row["Close"] - row["Open"], axis=1
+        ).to_frame()
+        result.columns = ["Movement"]  # use movement instead
+        result["Time"] = dataframe["time"]  # use time instead
         return result
-    
+
     def calculate_movement_in_label(dataframe):
 
         # get the rownames
@@ -42,23 +44,23 @@ class Movement:
         # list to save index
         index_list = []
         for index, row in dataframe.iterrows():
-    
+
             Open = row["Open"]
             Close = row["Close"]
-    
+
             if Close > Open:
                 movement = 1
             else:
                 movement = 0
-    
+
             # list to save index
             index_list.append(movement)
-    
+
         # turn the list into dataframe
         result = pd.DataFrame(index_list)
         result.index = rownames
         # print(result)
-    
+
         # add new column of index to dataframe
         return result
 
