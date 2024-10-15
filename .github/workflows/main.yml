@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: poetry install
     - name: Run tests
-      run: poetry run pytest
+      run: PYTHONPATH=src poetry run pytest
       env:
           INFLUXDB_URL: ${{ secrets.INFLUXDB_URL }}
           INFLUXDB_BUCKET: ${{ secrets.INFLUXDB_BUCKET }}
