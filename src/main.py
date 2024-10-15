@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI
-from api import app as api_app
-from scheduler import start_scheduler
+from src.api import app as api_app
+from src.scheduler import start_scheduler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

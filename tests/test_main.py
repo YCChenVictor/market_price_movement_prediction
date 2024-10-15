@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
 # from unittest.mock import patch
-from main import app
+from src.main import app
 # from pydantic import BaseModel
 
 
