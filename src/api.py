@@ -41,8 +41,10 @@ async def write_data(data: VolatilityData):
 @app.get("/get/market_data/")
 async def scrape_market_data(symbols: list[str] = Query(...), directory: str = Query(...)):
     try:
-        scrape_and_save_data(symbols, directory=directory)
+        await scrape_and_save_data(symbols, directory)
         etl = ETL(directory)
         etl.process()
+        return {"message": "Market data scraped and saved successfully."}
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
