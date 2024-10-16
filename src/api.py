@@ -4,6 +4,7 @@ from influxdb_client import Point, WritePrecision
 
 from src.db import write_api, INFLUXDB_BUCKET, INFLUXDB_ORG
 from src.scrape_finance_data_yahoo import scrape_and_save_data
+from src.etl import ETL
 
 
 app = FastAPI()
@@ -41,5 +42,7 @@ async def write_data(data: VolatilityData):
 async def scrape_market_data(symbols: list[str] = Query(...), directory: str = Query(...)):
     try:
         scrape_and_save_data(symbols, directory=directory)
+        etl = ETL(directory)
+        etl.process()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
