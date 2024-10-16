@@ -1,7 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from influxdb_client import Point, WritePrecision
+
 from src.db import write_api, INFLUXDB_BUCKET, INFLUXDB_ORG
+from src.scrape_finance_data_yahoo import scrape_and_save_data
+
 
 app = FastAPI()
 
@@ -29,5 +32,14 @@ async def write_data(data: VolatilityData):
 
         write_api.write(bucket=INFLUXDB_BUCKET, org=INFLUXDB_ORG, record=point)
         return {"message": "Volatility data written successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# maybe this one should be POST, but now we do not have database
+@app.get("/get/market_data/")
+async def scrape_market_data(symbols: list[str] = Query(...), directory: str = Query(...)):
+    try:
+        scrape_and_save_data(symbols, directory=directory)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
