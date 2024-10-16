@@ -3,11 +3,11 @@ services:
     build: .
     ports:
       - "8000:8000"
-  influxdb:
-    image: influxdb:2.7.10
-    ports:
-      - "8086:8086"
-    environment:
-      - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
-      - INFLUXDB_ORG=${INFLUXDB_ORG}
-      - INFLUXDB_TOKEN=${INFLUXDB_TOKEN}
+  # influxdb:
+  #   image: influxdb:2.7.10
+  #   ports:
+  #     - "8086:8086"
+  #   environment:
+  #     - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
+  #     - INFLUXDB_ORG=${INFLUXDB_ORG}
+  #     - INFLUXDB_TOKEN=${INFLUXDB_TOKEN}
