@@ -1,3 +1,5 @@
+import os
+import pandas as pd
 from fastapi import APIRouter, Query
 
 from src.scrape_finance_data_yahoo import scrape_and_save_data
@@ -21,6 +23,12 @@ async def scrape_market_data(symbols: list[str] = Query(...), directory: str = Q
 @market_data_router.get("/market_data/")
 async def list_market_data_info(directory):
     try:
-        return {"message": "Market data scraped and saved successfully."}
+        dict = {}
+        files = os.listdir(directory)
+        csv_files = [file for file in files if file.endswith('.csv')]
+        for csv_file in csv_files:
+            data = pd.read_csv(os.path.join(directory, csv_file))
+            dict[csv_file] = [data.iloc[0]['time'], data.iloc[-1]['time']]
+        return dict
     except Exception as e:
         print(e)
