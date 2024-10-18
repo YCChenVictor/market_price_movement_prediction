@@ -20,7 +20,7 @@ from movement import Movement
 from model_trainer import ModelTrainer
 import argparse
 
-
+# poetry run python src/train.py --train_features_tickers AUDCAD=X AUDCHF=X AUDJPY=X AUDNZD=X CADCHF=X CADJPY=X CADJPY=X --train_data_dir docs/market_prices/train --train_predict_ticker AAPL
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Script with array and other variables"
