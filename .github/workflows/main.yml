@@ -1,35 +1,21 @@
-name: market price movement prediction CI
+# name: market price movement prediction CI
 
-on:
-  pull_request:
-    branches: [ main, develop ]
+# on:
+#   pull_request:
+#     branches: [ main, develop ]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    services:
-      influxdb:
-        image: influxdb:2.7.10
-        env:
-          INFLUXDB_BUCKET: ${{ secrets.INFLUXDB_BUCKET }}
-          INFLUXDB_ORG: ${{ secrets.INFLUXDB_ORG }}
-          INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
-        ports:
-          - 8086:8086
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: 3.12.7
-    - uses: abatilo/actions-poetry@v2.0.0
-      with:
-        poetry-version: 1.8.3
-    - name: Install dependencies
-      run: poetry install
-    - name: Run tests
-      run: PYTHONPATH=. poetry run pytest
-      env:
-          INFLUXDB_URL: ${{ secrets.INFLUXDB_URL }}
-          INFLUXDB_BUCKET: ${{ secrets.INFLUXDB_BUCKET }}
-          INFLUXDB_ORG: ${{ secrets.INFLUXDB_ORG }}
-          INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
+# jobs:
+#   build:
+    # runs-on: ubuntu-latest
+    # steps:
+    # - uses: actions/checkout@v4
+    # - uses: actions/setup-python@v5
+    #   with:
+    #     python-version: 3.12.7
+    # - uses: abatilo/actions-poetry@v2.0.0
+    #   with:
+    #     poetry-version: 1.8.3
+    # - name: Install dependencies
+    #   run: poetry install
+    # - name: Run tests
+    #   run: PYTHONPATH=. poetry run pytest
